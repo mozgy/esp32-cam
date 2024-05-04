@@ -1,0 +1,16 @@
+{
+    "idf.portWin": "COM5",
+    "files.associations": {
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "*.txtcpp": "c"
+    },
+    "editor.lightbulb.enabled": "off"
+}

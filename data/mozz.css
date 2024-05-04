@@ -1,0 +1,124 @@
+
+body {
+  font-family: 'Comic Sans MS',cursive,sans-serif;
+  background: #181818;
+  color: #EFEFEF;
+  font-size: 24px
+}
+
+.limiter {
+  width: 1366px;
+  margin: 0 auto;
+}
+
+.container-tableCam {
+  width: 100%;
+/*  background: #fff; */
+  min-height: 80vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0px 0px;
+}
+
+.wrap-tableCam {
+  width: 680px;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  font-weight: unset;
+  padding-right: 10px;
+}
+
+.tableCam {
+/*  background-color: #fff; */
+  padding-top: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tableCam-body {
+  max-height: 24em;
+  overflow-y: auto;
+}
+
+.tableCam-body td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.tableCam th, td {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 14px;
+  color: #808080;
+  line-height: 1.2;
+  background-color: #fafafa;
+}
+
+.tableCam .tableCam-body .tableCam-foot {
+  padding-right: 8px;
+}
+
+.tableCam .tableCam-body table {
+  border-collapse: separate;
+  border-spacing: 0 4px; 
+}
+
+.tableCam .tableCam-body tr {
+  overflow: hidden;
+  border-bottom: 10px solid #fff;
+  border-radius: 10px;
+}
+
+.tableCam .tableCam-body td {
+  border: solid 1px transparent;
+  border-style: solid none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-left-style: solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right-style: solid;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px; 
+}
+
+.tableCam-foot th {
+  border: solid 1px transparent;
+  border-style: solid none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-left-style: solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-right-style: solid;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px; 
+}
+
+.tableCam tr:hover td {
+  background-color: #ebebeb;
+  cursor: pointer;
+}
+
+.co1 {
+  width: 92%;
+  padding-left: 8px;
+}
+
+.co2 {
+  width: 8%;
+  padding-right: 0px;
+  text-align: center;
+}
+
+.m-b-100 { margin-bottom: 100px; }
