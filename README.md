@@ -52,6 +52,8 @@ Connect to the DHCP assigned IP and enjoy!
     force complete ESP32-CAM reset
 - {CAM_IP}/sdcard<br>
     reinit SD Card after (re)inserting microSD
+- {CAM_IP}/metrics<br>
+    output metrics for prometheus/grafana nerds
 - {CAM_IP}/scan<br>
     JSON display of neighbour WiFi SSID/Channels
 - {CAM_IP}/archive<br>
