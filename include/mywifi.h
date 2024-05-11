@@ -19,11 +19,11 @@ extern int wifiConnTries;
 extern void flashLED( uint32_t );
 extern void flashLED( uint32_t, bool );
 
-void waitForConnect ( unsigned long timeout );
-String get_wifi_status( int status );
-void WiFiStationConnected( WiFiEvent_t event, WiFiEventInfo_t info );
-void WiFiGotIP( WiFiEvent_t event, WiFiEventInfo_t info );
-void WiFiStationDisconnected( WiFiEvent_t event, WiFiEventInfo_t info );
+void waitForConnect ( unsigned long );
+String get_wifi_status( int );
+void WiFiStationConnected( WiFiEvent_t , WiFiEventInfo_t );
+void WiFiGotIP( WiFiEvent_t, WiFiEventInfo_t );
+void WiFiStationDisconnected( WiFiEvent_t, WiFiEventInfo_t );
 void initWiFi( void );
 
 #endif

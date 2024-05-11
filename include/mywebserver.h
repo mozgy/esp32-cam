@@ -22,14 +22,14 @@ static const char *HTML_HEAD = "<!doctype html><html><head><title>Cam</title><li
 
 extern AsyncWebServer asyncWebServer;
 
-void asyncHandleRoot( AsyncWebServerRequest *request );
-void asyncHandleStatistics( AsyncWebServerRequest *request );
-void asyncHandleSetup( AsyncWebServerRequest *request );
-void asyncHandleFullSetup( AsyncWebServerRequest *request );
-void asyncHandleLogin( AsyncWebServerRequest *request );
-void asyncHandleNotFound( AsyncWebServerRequest *request );
-void listDirectory( String path, AsyncWebServerRequest *request );
-esp_err_t loadFromSDCard( AsyncWebServerRequest *request );
+void asyncHandleRoot( AsyncWebServerRequest* );
+void asyncHandleStatistics( AsyncWebServerRequest* );
+void asyncHandleSetup( AsyncWebServerRequest* );
+void asyncHandleFullSetup( AsyncWebServerRequest* );
+void asyncHandleLogin( AsyncWebServerRequest* );
+void asyncHandleNotFound( AsyncWebServerRequest* );
+void listDirectory( String, AsyncWebServerRequest* );
+esp_err_t loadFromSDCard( AsyncWebServerRequest* );
 void initAsyncWebServer( void );
 void doSnapSavePhoto( void );
 
@@ -40,12 +40,12 @@ String getHTMLFullSetupText( void );
 String getMetricsText( void );
 String getCameraStatus( void );
 
-void fnElapsedStr( char *str );
+void fnElapsedStr( char* );
 void initSDCard( void );
 extern bool SDCardOK;
 extern int tickerCounter;
 
 extern void reconfigureCamera( void );
-extern void fnSetFrameSize( String frameSize );
+extern void fnSetFrameSize( String );
 
 #endif
