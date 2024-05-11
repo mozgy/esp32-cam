@@ -8,6 +8,7 @@ String getHTMLRootText( void ) {
 
   String webText;
 
+  // webText = String( HTML_HEAD ) + "<body>";
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
@@ -24,7 +25,7 @@ String getHTMLStatisticsText( void ) {
   String webText;
   char tmpStr[80];
 
-  webText = "<!doctype html><html><head><title>Mozz Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
+  webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
   fnElapsedStr( elapsedTimeString );
@@ -38,39 +39,6 @@ String getHTMLStatisticsText( void ) {
 #endif
   webText += "<br>Time Period " + String( waitTime );
   webText += "</body></html>";
-
-  return webText; // TODO - make me pwetty !
-
-}
-
-String getHTMLSetupText( void ) {
-
-  String webText;
-
-  webText = "<!doctype html><html><head><title>Mozz Cam</title><link rel='stylesheet' type='text/css' href='onoffswitch.css'></head>";
-  webText += "<body>Camera Setup<form action='/set'>";
-  webText += "<table><tr><td>Flash</td>";
-  webText += "<td><div class='flashswitch'><input type='checkbox' name='flashswitch' value='flashOn' class='flashswitch-checkbox' id='flashswitch'";
-//  if( flashEnabled )
-//    webText += " checked";
-  webText += ">";
-  webText += "<label class='flashswitch-label' for='flashswitch'><span class='flashswitch-inner'></span><span class='flashswitch-switch'></span></label>";
-  webText += "</div></td></tr>";
-  webText += "</table>";
-  webText += "<p>Picture Size - <select name='picSize'>";
-  webText += " <option value='FRAMESIZE_QVGA'>320x240</option>";
-  webText += " <option value='FRAMESIZE_VGA'>640x480</option>";
-  webText += " <option value='FRAMESIZE_SVGA' selected>800x600</option>";
-  webText += " <option value='FRAMESIZE_XGA'>1024x768</option>";
-  webText += " <option value='FRAMESIZE_SXGA'>1280x1024</option>";
-  webText += " <option value='FRAMESIZE_UXGA'>1600x1200</option>";
-  webText += " <option value='FRAMESIZE_QXGA'>2048x1536</option>";
-  webText += "</select>";
-  webText += "<p><table><tr><td><div>";
-  // webText += "<label for='timePeriod'>Time Period - </label>";
-  // webText += "<input id='timePeriod' type='number' name='timePeriod' min='10' max='600' step='10' value='" + String( waitTime ) + "'>";
-  webText += "<input type='submit' value='Set' class='clickmebutton'>";
-  webText += "</div></td></tr><tr><td><a href='/' class='clickmebutton'>Back</a></td></tr></table></form></body></html>";
 
   return webText; // TODO - make me pwetty !
 
