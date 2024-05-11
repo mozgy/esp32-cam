@@ -1,5 +1,5 @@
 
-#include "camera.h" // for AI_THINKER_LED #define
+#include "camera_model.h"
 #include "mywifi.h"
 #include "credentials.h"
 

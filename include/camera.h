@@ -7,58 +7,23 @@
 typedef const String picSizeStrings_t;
 extern size_t photoFrameLength;
 
-// foo has to be of framesize_t size
-const picSizeStrings_t foo[] = {
-  "Framesize 96x96",
-  "Framesize QQVGA - 160x120",
-  "Framesize QCIF - 176x144",
-  "Framesize HQVGA - 240x176",
-  "Framesize 240x240",
-  "Framesize QVGA - 320x240",
-  "Framesize CIF - 400x296",
-  "Framesize HVGA - 480x320",
-  "Framesize VGA - 640x480",
-  "Framesize SVGA - 800x600",
-  "Framesize XGA - 1024x768",
-  "Framesize HD",
-  "Framesize SXGA - 1280x1024",
-  "Framesize UXGA - 1600x1200",
-  "Framesize FHD",
-  "Framesize P_HD",
-  "Framesize P_3MP",
-  "Framesize QXGA - 2048x1536"
-};
-
-// Select camera model
-// #define CAMERA_MODEL_WROVER_KIT
-// #define CAMERA_MODEL_ESP_EYE
-// #define CAMERA_MODEL_M5STACK_PSRAM
-// #define CAMERA_MODEL_M5STACK_WIDE
-#define CAMERA_MODEL_AI_THINKER
-// #define CAMERA_MODEL_XIAO_ESP32S3
+#include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "camera_pins.h"
 
 #define FLASH_LED LED_GPIO_NUM
 // #define AI_THINKER_LED 33    // onboard red one
 // #define FLASH_ENABLE_HW true // not yet used
 
-#define XIAO_ESP32S3_SDCS_PIN 21
-
 #include "variables.h"
 
-// extern int picBrightness;
-// extern int picSaturation;
 extern bool flashEnabled;
 extern bool SDCardOK;
 
 void initCam( void );
-// void fnSetFrameSize( String frameSize );
 void flashON( void );
 void flashOFF( void );
 void flashLED( uint32_t );
 void doSnapPhoto( void );
-
-#endif
 
 /*
 typedef enum {
@@ -89,3 +54,5 @@ typedef enum {
     FRAMESIZE_INVALID
 } framesize_t;
  */
+
+#endif

@@ -193,11 +193,12 @@ void initSDCard( void ) {
 //  #define SD_MMC_D0   2
 //  SD_MMC.setPins( SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
 #endif
-#ifdef CAMERA_MODEL_XIAO_ESP32S3
-//  ESP32S3
-//  #define SD_MMC_CMD 38
-//  #define SD_MMC_CLK 39
-//  #define SD_MMC_D0  40
+#ifdef ARDUINO_ESP32S3_DEV
+// #define XIAO_ESP32S3_SDCS_PIN 21
+#define SD_MMC_CMD 38
+#define SD_MMC_CLK 39
+#define SD_MMC_D0  40
+    Serial.printf( "Remapping SD_MMC card pins to sd_clk=%d sd_cmd=%d sd_data=%d\n", SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
     SD_MMC.setPins( SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
 #endif
   // if( !SD_MMC.begin() ) { // fast 4bit mode
