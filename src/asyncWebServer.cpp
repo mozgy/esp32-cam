@@ -142,7 +142,7 @@ class AsyncJpegStreamResponse: public AsyncAbstractResponse {
                 if(index && _frame.fb){
                     uint64_t end = (uint64_t)micros();
                     int fp = (end - lastAsyncRequest) / 1000;
-                    log_printf("Size: %uKB, Time: %ums (%.1ffps)\n", _jpg_buf_len/1024, fp);
+                    // log_printf("Size: %uKB, Time: %ums (%.1ffps)\n", _jpg_buf_len/1024, fp); // TODO - implement logging
                     lastAsyncRequest = end;
                     if(_frame.fb->format != PIXFORMAT_JPEG){
                         free(_jpg_buf);
@@ -176,7 +176,7 @@ class AsyncJpegStreamResponse: public AsyncAbstractResponse {
                         _jpg_buf = NULL;
                         return 0;
                     }
-                    log_i("JPEG: %lums, %uB", millis() - st, _jpg_buf_len);
+                    // log_i("JPEG: %lums, %uB", millis() - st, _jpg_buf_len);  // TODO - implement logging
                 } else {
                     _jpg_buf_len = _frame.fb->len;
                     _jpg_buf = _frame.fb->buf;
@@ -266,7 +266,7 @@ void asyncHandleFullSetup( AsyncWebServerRequest *request ) {
     filePointer.close();
     return;
   }
-  request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='20; URL=/'></head><body>HTML File Not Found!</body></html>" );
+  request->send( 200, "text/html", HTML_NOT_FOUND );
 
 }
 
@@ -287,14 +287,14 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
   }
   if( !request->authenticate( http_username, http_password ) )
     return request->requestAuthentication();  // Hm? Double-check this return ..
-  request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/'></head><body>Login Success!</body></html>" );
+  request->send( 200, "text/html", LOGIN_SUCCESS );
 
 }
 
 void asyncHandleCapture( AsyncWebServerRequest *request ) {
 
   // Serial.println( " asyncHandleCapture " );
-  // http://192.168.1.164:8080/capture?_cb=1701038417082
+  // http://{CAM_IP}/capture?_cb=1701038417082
   String value = "";
   if( request->hasParam( "_cb" ) ) {
     AsyncWebParameter* arg = request->getParam( "_cb" );
@@ -315,6 +315,18 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
 
 }
 
+void asyncHandleConnectPrusa( AsyncWebServerRequest *request ) {
+
+  // WiFiClient prusa;
+
+  // prusa.connect( ?.prusa.com, 443 );
+  // prusa.println( ALL_HEADERS );
+  // prusa.print( photoFrame );
+  // prusa.println();
+  // prusa.stop();
+
+}
+
 void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
   // Serial.println( " asyncHandleWebSockets " );
@@ -326,7 +338,7 @@ void asyncHandleStream( AsyncWebServerRequest *request ) {
 
   // Serial.println( " asyncHandleStream " );
 
-  if ( timeLapse ) {
+  if ( timeLapse ) {  // FIXME: display a picture instead
     request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/setup'></head><body>Time Lapse Active!</body></html>" );
     return;
   }
@@ -450,8 +462,8 @@ void asyncHandleESPReset( AsyncWebServerRequest *request ) {
     return;
   }
 
-  Serial.println( "Restarting in 10 seconds" );
-  request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='30; URL=/'></head><body>ESP Restart!</body></html>" );
+  Serial.println( "Restarting in 5 seconds" );
+  request->send( 200, "text/html", ESP_RESTART );
   delay( 2000 );
   WiFi.disconnect();
   ESP.restart();
@@ -471,12 +483,11 @@ void asyncHandleSDCardRemount( AsyncWebServerRequest *request ) {
     return;
   }
 
-// TODO - make it runtime
 #ifdef HAVE_SDCARD
   SD_MMC.end();
   delay( 1000 );
   initSDCard();
-  request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='8; URL=/'></head><body>SD Card Remount!</body></html>" );
+  request->send( 200, "text/html", SD_CARD_REMOUNT );
 #endif
 
 }
@@ -586,7 +597,7 @@ void initAsyncWebServer( void ) {
   asyncWebServer.on( "/stream", HTTP_GET, asyncHandleStream );
   asyncWebServer.on( "/ws", HTTP_GET, asyncHandleWebSockets );  // TODO
 
-  asyncWebServer.on( "/delete", HTTP_GET, asyncHandleDelete );    // TODO
+  asyncWebServer.on( "/delete", HTTP_GET, asyncHandleDelete );  // TODO
   asyncWebServer.on( "/archive", HTTP_GET, asyncHandleArchive );
   asyncWebServer.on( "/sdcard", HTTP_GET, asyncHandleSDCardRemount );
 
@@ -594,6 +605,8 @@ void initAsyncWebServer( void ) {
   asyncWebServer.on( "/espReset", HTTP_GET, asyncHandleESPReset );
 
   asyncWebServer.on( "/metrics", HTTP_GET, asyncHandleMetrics );
+
+  asyncWebServer.on( "/prusa", HTTP_POST, asyncHandleConnectPrusa );  // TODO
 
   asyncWebServer.onNotFound( asyncHandleNotFound );
 
