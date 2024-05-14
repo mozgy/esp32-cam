@@ -30,7 +30,7 @@ String getHTMLStatisticsText( void ) {
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
   fnElapsedStr( elapsedTimeString );
   webText += String( elapsedTimeString );
-// Serial.printf( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d\n", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
+// log_v( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
 #ifdef HAVE_SDCARD
   if ( SDCardOK ) {
     sprintf( tmpStr, "<br>Total space: %lluMB - Used space %lluMB\n", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
@@ -66,7 +66,7 @@ esp_err_t loadFromSDCard( AsyncWebServerRequest *request ) {
 
 // SDCard load filename - google.com:443
 // SDCard load filename - www.sneakersnstuff.com:443
-  Serial.printf( "SDCard load - %s, %s, %s\n", path.c_str(), fileName.c_str(), baseName.c_str() );
+  log_d( "SDCard load - %s, %s, %s\n", path.c_str(), fileName.c_str(), baseName.c_str() );
 
   File dataFile = SD_MMC.open( fileName );
 
@@ -106,7 +106,7 @@ void listDirectory( String path, AsyncWebServerRequest *request ) {
     String tmpPath = path;
     path = "/mozz-cam" + tmpPath;
   }
-  Serial.printf( "listDirectory - %s\n", path.c_str() );
+  log_d( "listDirectory - %s\n", path.c_str() );
 
   File linkNameFP = SD_MMC.open( path.c_str() );
   if( !linkNameFP ) {
@@ -129,8 +129,7 @@ void listDirectory( String path, AsyncWebServerRequest *request ) {
       fileName = String( file.name() );
       hrefName = path + "/" + fileName;
       webText += "<tr><td class='co1'><a href='" + hrefName + "'>" + fileName + "</a></td>";
-      Serial.print( " - href - " );
-      Serial.println( hrefName );
+      log_d( " - href - ", hrefName.c_str() );
       webText += "<td class='co2'>";
       if( fileName.endsWith( ".jpg" ) ) {
         webText += "<a href='/delete?filename=" + hrefName + "'>X</a>";
@@ -141,7 +140,7 @@ void listDirectory( String path, AsyncWebServerRequest *request ) {
       file.close();
 //      request->sendChunked( webText );
       file = linkNameFP.openNextFile();
-//      Serial.printf( "Heap after openNextFile: %u\n", ESP.getFreeHeap() );
+//      log_d( "Heap after openNextFile: %u", ESP.getFreeHeap() );
       numPhoto++;
     }
   }
@@ -154,8 +153,8 @@ void listDirectory( String path, AsyncWebServerRequest *request ) {
   linkNameFP.close();
 
   unsigned long atEnd = millis();
-  Serial.printf( "Time in listDirectory: %lu milisec\n", atEnd - atStart );
-//  Serial.printf( "Heap after listDirectory: %u\n", ESP.getFreeHeap() );
+  log_d( "Time in listDirectory: %lu milisec\n", atEnd - atStart );
+//  log_d( "Heap after listDirectory: %u", ESP.getFreeHeap() );
 
 }
 
@@ -184,7 +183,7 @@ String listDirectoryAsString( File path ) {
       webText += "</td></tr>";
       file.close();
       file = path.openNextFile();
-//      DBG_OUTPUT_PORT.printf( "Heap after openNextFile: %u\n", ESP.getFreeHeap() );
+      log_d( "Heap after openNextFile: %u\n", ESP.getFreeHeap() );
       numPic++;
     }
   }
@@ -216,7 +215,7 @@ String listDirectoryAsJSON( File path ) {
       strJSON += "\"}";
       file.close();
       file = path.openNextFile();
-//      DBG_OUTPUT_PORT.printf( "Heap after openNextFile: %u\n", ESP.getFreeHeap() );
+      log_d( "Heap after openNextFile: %u\n", ESP.getFreeHeap() );
       numPic++;
     }
   }

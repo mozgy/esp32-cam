@@ -128,7 +128,7 @@ void initOTA( void ) {
 
       // Stop the camera since OTA will crash the module if it is running.
       // the unit will need rebooting to restart it, either by OTA on success, or manually by the user
-      Serial.println("Stopping Camera");
+      log_d( "Stopping Camera" );
       esp_err_t err = esp_camera_deinit();
       // critERR = "<h1>OTA Has been started</h1><hr><p>Camera has Halted!</p>";
       // critERR += "<p>Wait for OTA to finish and reboot, or <a href=\"control?var=reboot&val=0\" title=\"Reboot Now (may interrupt OTA)\">reboot manually</a> to recover</p>";
@@ -157,20 +157,19 @@ void initOTA( void ) {
 
 void getNTPTime( void ) {
 
-  Serial.print( "Contacting Time Server - " );
-//  configTime( 3600*timeZone, daySaveTime*3600, "time.nist.gov", "0.pool.ntp.org", "1.pool.ntp.org" );
-  configTime( 3600*timeZone, daySaveTime*3600, "tik.t-com.hr", "tak.t-com.hr" );
+  log_i( "Contacting Time Server - " );
+  configTime( 3600*timeZone, daySaveTime*3600, "time.nist.gov", "0.pool.ntp.org", "1.pool.ntp.org" );
+  // configTime( 3600*timeZone, daySaveTime*3600, "tik.t-com.hr", "tak.t-com.hr" ); // my local NTP sources
   delay( 2000 );
   startTime.tm_year = 0;
   getLocalTime( &startTime, 5000 );
   while( startTime.tm_year == 70 ) {
-    Serial.print( "NTP failed, trying again .. " );
+    log_e( "NTP failed, trying again .. " );
     delay( 5000 );
     getLocalTime( &startTime, 5000 );
   }
-  Serial.printf( "Local Time : %d-%02d-%02d %02d:%02d:%02d\n", (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
+  log_i( "Local Time : %d-%02d-%02d %02d:%02d:%02d", (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
 
-//  // yes, I know it can be oneliner -
 //  sprintf( currentDateTime, "%04d", (tmstruct.tm_year)+1900 );
 //  sprintf( currentDateTime, "%s%02d", currentDateTime, (tmstruct.tm_mon)+1 );
 //  sprintf( currentDateTime, "%s%02d", currentDateTime, tmstruct.tm_mday );
@@ -198,7 +197,7 @@ void initSDCard( void ) {
 #define SD_MMC_CMD 38
 #define SD_MMC_CLK 39
 #define SD_MMC_D0  40
-    Serial.printf( "Remapping SD_MMC card pins to sd_clk=%d sd_cmd=%d sd_data=%d\n", SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
+    log_i( "Remapping SD_MMC card pins to sd_clk=%d sd_cmd=%d sd_data=%d", SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
     SD_MMC.setPins( SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0 );
 #endif
   // if( !SD_MMC.begin() ) { // fast 4bit mode
@@ -210,7 +209,7 @@ void initSDCard( void ) {
   // pinMode(4, OUTPUT);
   // digitalWrite(4, 0); // set lamp pin fully off as sd_mmc library still initialises pin 4 in 1 line mode#else
 #endif
-    Serial.println( "SD card init failed" );
+    log_e( "SD card init failed" );
     SDCardOK = false;
     timeLapse = false;
     return;
@@ -219,26 +218,26 @@ void initSDCard( void ) {
   uint8_t cardType = SD_MMC.cardType();
 
   if( cardType == CARD_NONE ) {
-    Serial.println( "No SD card attached" );
+    log_e( "No SD card attached" );
     return;
   }
 
-  Serial.print( "SD Card Type: " );
+  String SDCardType = "SD Card Type: ";
   if( cardType == CARD_MMC ) {
-    Serial.println( "MMC" );
+    SDCardType += "MMC";
   } else if( cardType == CARD_SD ) {
-    Serial.println( "SDSC" );
+    SDCardType += "SDSC";
   } else if( cardType == CARD_SDHC ) {
-    Serial.println( "SDHC" );
+    SDCardType += "SDHC";
   } else {
-    Serial.println( "UNKNOWN" );
+    SDCardType += "UNKNOWN";
   }
 
   uint64_t cardSize = SD_MMC.cardSize() / ( 1024 * 1024 );
-  Serial.printf( "SD Card Size: %lluMB\n", cardSize );
+  log_i( "%s, SD Card Size: %lluMB", SDCardType.c_str(), cardSize );
 
   if( !SD_MMC.mkdir( "/mozz-cam" ) ) {
-    // Serial.println( "DIR exists .." );
+    // log_e( "DIR exists .." );
   }
 
 #ifdef CAMERA_MODEL_AI_THINKER
@@ -254,8 +253,8 @@ void setup() {
   Serial.begin( 115200 );
   while( !Serial );   // TODO - rework all Serial outputs to log_info, log_error, log_debug
   delay( 400 );
-  Serial.println( "Setup Start!" );
   Serial.setDebugOutput( true );
+  log_d( "Setup Start!" );
   // WiFi.printDiag(Serial); // research this
 
   // set these three lines above BEFORE AND AFTER the call to esp_wifi_init
@@ -266,21 +265,20 @@ void setup() {
   prnEspStats();
 
   if( !LittleFS.begin( true ) ) {
-    Serial.println( "Formatting LittleFS" );
+    log_d( "Formatting LittleFS" );
     if( !LittleFS.begin( ) ) {
-      Serial.println( "An Error has occurred while mounting LittleFS" );
+      log_e( "An Error has occurred while mounting LittleFS" );
     }
   }
 
-  Serial.println( "Before initWiFi!" );
+  log_d( "Before initWiFi!" );
   delay( 10 );
   initWiFi();
   wifiWaitTime = millis();
   getNTPTime();
-  Serial.println( WiFi.localIP() );
 
 #ifdef HAVE_SDCARD
-  Serial.println( "Before initSDCard!" );
+  log_d( "Before initSDCard!" );
   delay( 10 );
   // [E][SD_MMC.cpp:132] begin(): Failed to mount filesystem. If you want the card to be formatted, set format_if_mount_failed = true.
   initSDCard( );  // *HAS* to be *before* initCam() if board has SDCard !
@@ -292,21 +290,21 @@ void setup() {
 #endif
 
 #ifdef HAVE_CAMERA
-  Serial.println( "Before initCam!" );
+  log_d( "Before initCam!" );
   delay( 10 );
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
 #endif
 
 #ifdef HAVE_BME280
-  Serial.println( "Before initBME!" );
+  log_d( "Before initBME!" );
   delay( 10 );
   initBME();  // *HAS* to be *after* initSDCard() if board has SDCard ! Hmm, maybe not before
 #endif
 
   delay( 10 );
-  Serial.println( "Before initAsyncWebServer!" );
+  log_d( "Before initAsyncWebServer!" );
   initAsyncWebServer();
-  Serial.println( "Before initOTA!" );
+  log_d( "Before initOTA!" );
   initOTA();
 
   tickerCamCounter = 0;
@@ -319,7 +317,6 @@ void setup() {
   tickerBMEMissed = 0;
   tickerBME.attach( 61, funcBMETicker );
   tickerBMEFired = true;
-
   bme280Found = false;
 
 }
@@ -335,25 +332,20 @@ void loop() {
     doSnapSavePhoto();
 #endif
     wifiStatus = WiFi.status();
-    Serial.println( get_wifi_status( wifiStatus ) );
-    Serial.print( "(RSSI): " );
-    Serial.print( WiFi.RSSI() );
-    Serial.print( " dBm, MAC=" );
-    Serial.print( WiFi.macAddress() );
+    log_d( "%s", get_wifi_status( wifiStatus ) );
+    log_i( "(RSSI): %d dBm, MAC=%s", WiFi.RSSI(), WiFi.macAddress().c_str() );
     if( WiFi.status() == WL_CONNECTED ) {
-      Serial.print( ", IP=" );
-      Serial.print( WiFi.localIP() );
+      log_i( "IP=%s", WiFi.localIP().toString().c_str() );   // TODO - add to previous log line
     }
-    Serial.println();
     fnElapsedStr( elapsedTimeString );
-    Serial.printf( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d\n", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
+    log_d( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
     if( oldTickerValue != waitTime ) {
       tickerCam.detach( );
       tickerCam.attach( waitTime, funcCamTicker );
       oldTickerValue = waitTime;
     }
     if( tickerCamMissed > 1 ) {
-      Serial.printf( "Missed %d tickers\n", tickerCamMissed - 1 );
+      log_e( "Missed %d tickers", tickerCamMissed - 1 );
     }
     tickerCamMissed = 0;
   }
@@ -368,11 +360,11 @@ void loop() {
       bmeSerialPrint();
     }
 #else
-    Serial.printf( "BME280 tick - %s\n", elapsedTimeString );
+    log_d( "BME280 tick - %s", elapsedTimeString );
 #endif
 
     if( tickerBMEMissed > 1 ) {
-      Serial.printf( "Missed %d tickers\n", tickerBMEMissed - 1 );
+      log_e( "Missed %d tickers", tickerBMEMissed - 1 );
     }
     tickerBMEMissed = 0;
 

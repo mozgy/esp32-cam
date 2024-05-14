@@ -62,11 +62,11 @@ void initCam( void ) {
   // camera init
   esp_err_t err = esp_camera_init( &config );
   if ( err != ESP_OK ) {
-    Serial.printf( "Camera init failed with error 0x%x", err );
+    log_e( "Camera init failed with error 0x%x", err );
     delay( 2000 );
     ESP.restart();
   }
-  Serial.println( "Camera ON!" );
+  log_i( "Camera ON!" );
 
   sensor_t * s = esp_camera_sensor_get();
 
@@ -122,7 +122,7 @@ String getCameraStatus( void ) {
   jsonResponse += ( flashEnabled ) ? "1" : "0";
   jsonResponse += "}";
 
-  Serial.println( jsonResponse );
+  log_d( "%s", jsonResponse.c_str() );
   return jsonResponse;
 
 }
@@ -182,7 +182,7 @@ void flashON( void ) {
 
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, HIGH );
-//  Serial.println( "Flash is ON, smile!" );
+//  log_d( "Flash is ON, smile!" );
 
 }
 
@@ -270,22 +270,22 @@ void doSnapSavePhoto( void ) {
 
     photoFileDir = String( "/mozz-cam/" );  // /mozz-cam/
     if( !SD_MMC.mkdir( photoFileDir ) ) {
-      // Serial.println( "MKDIR Failed!" ); // dir could exist
+      // log_e( "MKDIR Failed!" ); // dir could exist
     }
     sprintf( currentDateTime, "%04d\0", (tmstruct.tm_year)+1900 );
     photoFileDir += String( currentDateTime );  // /mozz-cam/YYYY
     if( !SD_MMC.mkdir( photoFileDir ) ) {
-      // Serial.println( "MKDIR Failed!" ); // dir could exist
+      // log_e( "MKDIR Failed!" ); // dir could exist
     }
     sprintf( currentDateTime, "/%02d%02d\0", (tmstruct.tm_mon)+1, tmstruct.tm_mday );
     photoFileDir += String( currentDateTime );  // /mozz-cam/YYYY/MMDD
     if( !SD_MMC.mkdir( photoFileDir ) ) {
-      // Serial.println( "MKDIR Failed!" ); // dir could exist
+      // log_e( "MKDIR Failed!" ); // dir could exist
     }
     sprintf( currentDateTime, "/%02d\0", tmstruct.tm_hour );
     photoFileDir += String( currentDateTime );
     if( !SD_MMC.mkdir( photoFileDir ) ) {
-      // Serial.println( "MKDIR Failed!" ); // dir could exist
+      // log_e( "MKDIR Failed!" ); // dir could exist
     }
 
     // yes, I know it can be oneliner -
@@ -296,11 +296,11 @@ void doSnapSavePhoto( void ) {
     sprintf( currentDateTime, "%s%02d", currentDateTime, tmstruct.tm_min );
     sprintf( currentDateTime, "%s%02d\0", currentDateTime, tmstruct.tm_sec );
     photoFileName = photoFileDir + String( "/photo-" ) + currentDateTime + String( ".jpg" ) ;
-    Serial.println( photoFileName );
+    log_d( "%s", photoFileName.c_str() );
 
     photoFP = SD_MMC.open( photoFileName, FILE_WRITE );
     if( !photoFP ) {
-      Serial.println( "SD Card file open for write error" );
+      log_e( "SD Card file open for write error" );
       return;
     }
   }
@@ -318,15 +318,14 @@ void doSnapSavePhoto( void ) {
 //    photoFrameBuffer = esp_camera_fb_get(); // second time the charm ??
   flashOFF();
   if( !photoFrameBuffer ) {
-    Serial.println( "Camera Capture Failed" );
+    log_e( "Camera Capture Failed" );
     // photoFrame = load_from_dataFS( "no-pic-200x200.png" );
     return;
   }
   // if (fb->format == PIXFORMAT_JPEG) // ToDo Check, JPEG mandatory
 
   photoFrameLength = photoFrameBuffer->len;
-  // Serial.print( "Picture length : " );
-  // Serial.println( photoFrameLength );
+  // log_v( "Picture length : %d", photoFrameLength );
   for( size_t i = 0; i < photoFrameLength; i++ ) {
     photoFrame += (char) photoFrameBuffer->buf[ i ];
   }
@@ -335,7 +334,7 @@ void doSnapSavePhoto( void ) {
   //  process_image(fb->width, fb->height, fb->format, fb->buf, fb->len);
   if( timeLapse && SDCardOK ) {
     photoFP.write( photoFrameBuffer->buf, photoFrameLength );
-    Serial.printf( "Time Lapse ON - Wrote File - Used space: %lluMB\n", SD_MMC.usedBytes() / (1024 * 1024) );
+    log_d( "Time Lapse ON - Wrote File - Used space: %lluMB", SD_MMC.usedBytes() / (1024 * 1024) );
   }
 
   //return the frame buffer back to the driver for reuse
@@ -347,8 +346,8 @@ void doSnapSavePhoto( void ) {
   }
 
   int64_t capture_end = esp_timer_get_time();
-  Serial.printf("Capture Time: %uB %ums\r\n", (uint32_t)( photoFrameLength ), (uint32_t)( ( capture_end - capture_start )/1000 ) );
-//  Serial.printf( "Total space: %lluMB\n", SD_MMC.totalBytes() / (1024 * 1024) );
-//  Serial.printf( "Used space: %lluMB\n", SD_MMC.usedBytes() / (1024 * 1024) );
+  log_d( "Capture Time: %uB %ums", (uint32_t)( photoFrameLength ), (uint32_t)( ( capture_end - capture_start )/1000 ) );
+//  log_d( "Total space: %lluMB", SD_MMC.totalBytes() / (1024 * 1024) );
+//  log_d( "Used space: %lluMB", SD_MMC.usedBytes() / (1024 * 1024) );
 
 }

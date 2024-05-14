@@ -18,12 +18,10 @@ void bmeSerialPrint( void ) {
 
   if( bme280Found ) {
 #ifdef HAVE_BME280
-    Serial.printf( "Temperature = %0.2f°C, ", bme.readTemperature() );  // \xB0 is °
-    Serial.printf( "Pressure = %4.2f hPA, ", (bme.readPressure() / 100.0F) );
-    Serial.printf( "Humidity = %.2f%%, ", bme.readHumidity() );
-    Serial.printf( "Altitude = %.2f, ", bme.readAltitude( SEALEVELPRESSURE_HPA ) );
+    // \xB0 is °
+    log_i( "Temperature = %0.2f°C, Pressure = %4.2f hPA, Humidity = %.2f%%, Altitude = %.2f", bme.readTemperature(), (bme.readPressure() / 100.0F), bme.readHumidity(), bme.readAltitude( SEALEVELPRESSURE_HPA ) );
 #endif
-    Serial.printf( "%s\n", elapsedTimeString );
+    log_i( "%s", elapsedTimeString );
   }
 
 }
@@ -38,7 +36,7 @@ void initBME( void ) {
   bme280Found = true;
   // if( !bme.begin( 0x76 ) ) {
   if( !bme.begin( 0x76, &Wire1 ) ) {
-    Serial.println( "Could not find a valid BME280 sensor, check wiring!" );
+    log_e( "Could not find a valid BME280 sensor, check wiring!" );
     bme280Found = false;
   }
 

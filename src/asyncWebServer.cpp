@@ -216,28 +216,28 @@ class AsyncJpegStreamResponse: public AsyncAbstractResponse {
 
 void asyncHandleRoot( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleRoot " );
+  log_d( " asyncHandleRoot " );
   request->send( 200, "text/html", getHTMLRootText() );
 
 }
 
 void asyncHandleStatistics( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleStatistics " );
+  log_d( " asyncHandleStatistics " );
   request->send( 200, "text/html", getHTMLStatisticsText() );
 
 }
 
 void asyncHandleMetrics( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleMetrics " );
+  log_d( " asyncHandleMetrics " );
   request->send( 200, "text/plain", getMetricsText() );
 
 }
 
 void asyncHandleStatus( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleStatus " );
+  log_d( " asyncHandleStatus " );
   AsyncWebServerResponse *response = request->beginResponse( 200, "application/json", getCameraStatus() );
   response->addHeader( "Access-Control-Allow-Origin", "*" );
   request->send( response );
@@ -251,7 +251,7 @@ void asyncHandleFullSetup( AsyncWebServerRequest *request ) {
     return;
   }
 
-  // Serial.println( " asyncHandleFullSetup " );
+  log_d( " asyncHandleFullSetup " );
 
   String fileName = "/esp32setup.html";
 
@@ -293,7 +293,7 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
 
 void asyncHandleCapture( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleCapture " );
+  log_d( " asyncHandleCapture " );
   // http://{CAM_IP}/capture?_cb=1701038417082
   String value = "";
   if( request->hasParam( "_cb" ) ) {
@@ -329,14 +329,14 @@ void asyncHandleConnectPrusa( AsyncWebServerRequest *request ) {
 
 void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleWebSockets " );
+  log_d( " asyncHandleWebSockets " );
   request->send( 200, "text/html", "Here Be WebSockets .." );
 
 }
 
 void asyncHandleStream( AsyncWebServerRequest *request ) {
 
-  // Serial.println( " asyncHandleStream " );
+  log_d( " asyncHandleStream " );
 
   if ( timeLapse ) {  // FIXME: display a picture instead
     request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/setup'></head><body>Time Lapse Active!</body></html>" );
@@ -366,7 +366,7 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
     return;
   }
 
-  Serial.printf( " asyncHandleCommand - %s - %s\n", variable, value );
+  log_d( " asyncHandleCommand - %s - %s", variable, value );
 
   sensor_t *sensor = esp_camera_sensor_get();
   int err = 0;
@@ -462,7 +462,7 @@ void asyncHandleESPReset( AsyncWebServerRequest *request ) {
     return;
   }
 
-  Serial.println( "Restarting in 5 seconds" );
+  log_v( "Restarting in 5 seconds" );
   request->send( 200, "text/html", ESP_RESTART );
   delay( 2000 );
   WiFi.disconnect();
@@ -482,6 +482,8 @@ void asyncHandleSDCardRemount( AsyncWebServerRequest *request ) {
     request->send( 200, "text/html", NOT_AUTHORIZED );
     return;
   }
+
+  log_d( " asyncHandleSDCardRemount " );
 
 #ifdef HAVE_SDCARD
   SD_MMC.end();
@@ -504,7 +506,7 @@ void asyncHandleDelete( AsyncWebServerRequest *request ) {
   AsyncWebParameter* argDelete = request->getParam( "filename" );
   String fileName = argDelete->value();
 
-  Serial.printf( " asyncHandleDelete - %s\n", fileName );
+  log_d( " asyncHandleDelete - %s\n", fileName );
   webText = "ToDelete - ";
   webText += fileName;
   request->send( 200, "text/plain", webText );
@@ -513,12 +515,10 @@ void asyncHandleDelete( AsyncWebServerRequest *request ) {
 //  deleteFile( SD_MMC, fileName );
   if( SD_MMC.remove( fileName.c_str() ) ) {
     webText = "Deleted - " + String( fileName );
-    Serial.print( "Deleted - " );
-    Serial.println( fileName );
+    log_v( "Deleted - %s", fileName.c_str() );
   } else {
     webText = "Cannot delete - " + String( fileName );
-    Serial.print( "Cannot delete - " );
-    Serial.println( fileName );
+    log_v( "Cannot delete - %s", fileName.c_str() );
   }
   request->send( 200, "text/plain", webText );
 
@@ -545,10 +545,7 @@ void asyncHandleNotFound( AsyncWebServerRequest *request ) {
     webText += String( p->name().c_str() ) + " : " + String( p->value().c_str() ) + "\r\n";
   }
 
-  Serial.print( "Basename - " );
-  Serial.print( fileName );
-  Serial.print( " - " );
-  Serial.println( webText );
+  log_v( "Basename - %s - %s", fileName.c_str(), webText.c_str() );
 
   bool fileLocalFS = false;
   if( fileName.endsWith( ".css" ) ) {
@@ -578,7 +575,7 @@ void asyncHandleNotFound( AsyncWebServerRequest *request ) {
 
   webText = "\nNo Handler\r\n" + webText;
   request->send( 404, "text/plain", webText );
-  Serial.println( webText );
+  log_v( "%s", webText.c_str() );
 
 }
 

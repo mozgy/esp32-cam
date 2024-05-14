@@ -42,24 +42,22 @@ String get_wifi_status( int status ) {
 
 void WiFiStationConnected( WiFiEvent_t event, WiFiEventInfo_t info ) {
 
-  Serial.println( "Connected to AP successfully!" );
+  log_i( "Connected to AP successfully!" );
 
 }
 
 void WiFiGotIP( WiFiEvent_t event, WiFiEventInfo_t info ) {
 
-  Serial.print( "WiFi connected with IP address: " );
-  // Serial.println( WiFi.localIP() );
-  Serial.println( IPAddress( info.got_ip.ip_info.ip.addr ) );
+  log_i( "WiFi connected with IP address: %s", WiFi.localIP().toString().c_str() );
+  // Serial.println( IPAddress( info.got_ip.ip_info.ip.addr ) );
 
 }
 
 void WiFiStationDisconnected( WiFiEvent_t event, WiFiEventInfo_t info ) {
 
-  Serial.println( "Disconnected from WiFi access point" );
-  Serial.print( "WiFi lost connection. Reason: " );
-  Serial.println( info.wifi_sta_disconnected.reason );
-  Serial.println( "Reconnecting .." );
+  log_i( "Disconnected from WiFi access point" );
+  log_i( "WiFi lost connection. Reason: %d", info.wifi_sta_disconnected.reason );
+  log_i( "Reconnecting .." );
   // WiFi.disconnect( );
   // vTaskDelay( 4000 );
   WiFi.begin( ssid, password );
@@ -86,7 +84,6 @@ void initWiFi( void ) {
   WiFi.onEvent( WiFiStationConnected, ARDUINO_EVENT_WIFI_STA_CONNECTED );
   WiFi.onEvent( WiFiGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP );
   WiFi.onEvent( WiFiStationDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED );
-  Serial.println( WiFi.macAddress() );
   WiFi.setHostname( ESP_CAM_HOSTNAME );
   WiFi.begin( ssid, password );
   WiFi.setSleep( false );
@@ -111,12 +108,3 @@ void initWiFi( void ) {
 //      WIFI_AUTH_WAPI_PSK,         /**< authenticate mode : WAPI_PSK */
 //      WIFI_AUTH_MAX
 // } wifi_auth_mode_t;
-
-/*
-  IPAddress camIP(192,168,1,199);
-  IPAddress camDNS(192,168,1,1);
-  IPAddress camGW(192,168,1,1);
-  IPAddress camMask(255,255,255,0);
-  WiFi.config( camIP, camGW, camMask, camDNS );
-  WiFi.begin( ssid, password );
-  */
