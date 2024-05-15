@@ -315,15 +315,13 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
 
 }
 
-void asyncHandleConnectPrusa( AsyncWebServerRequest *request ) {
+void asyncHandlePrusaConnect( AsyncWebServerRequest *request ) {
 
-  // WiFiClient prusa;
+  log_d( " asyncHandleConnectPrusa " );
 
-  // prusa.connect( ?.prusa.com, 443 );
-  // prusa.println( ALL_HEADERS );
-  // prusa.print( photoFrame );
-  // prusa.println();
-  // prusa.stop();
+  String response;
+  response = photoSendPrusaConnect();
+  request->send( 200, "text/plain", response );
 
 }
 
@@ -603,7 +601,7 @@ void initAsyncWebServer( void ) {
 
   asyncWebServer.on( "/metrics", HTTP_GET, asyncHandleMetrics );
 
-  asyncWebServer.on( "/prusa", HTTP_POST, asyncHandleConnectPrusa );  // TODO
+  asyncWebServer.on( "/prusa", HTTP_POST, asyncHandlePrusaConnect );
 
   asyncWebServer.onNotFound( asyncHandleNotFound );
 

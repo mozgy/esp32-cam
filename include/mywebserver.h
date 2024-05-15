@@ -32,6 +32,7 @@ void listDirectory( String, AsyncWebServerRequest* );
 esp_err_t loadFromSDCard( AsyncWebServerRequest* );
 void initAsyncWebServer( void );
 void doSnapSavePhoto( void );
+extern String photoSendPrusaConnect( void );
 
 String getHTMLRootText( void );
 String getHTMLStatisticsText( void );

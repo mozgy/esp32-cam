@@ -31,12 +31,13 @@ bool SDCardOK;
 
 bool bme280Found;
 
-Ticker tickerCam, tickerBME;
-boolean tickerCamFired, tickerBMEFired;
+Ticker tickerCam, tickerBME, tickerPrusa;
+boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
 int tickerCamCounter, tickerCamMissed;
 int waitTime = 60;
 int oldTickerValue;
 int tickerBMECounter, tickerBMEMissed;
+int tickerPrusaCounter, tickerPrusaMissed;
 
 void funcCamTicker( void ) {
   tickerCamFired = true;
@@ -48,6 +49,12 @@ void funcBMETicker( void ) {
   tickerBMEFired = true;
   tickerBMECounter++;
   tickerBMEMissed++;
+}
+
+void funcPrusaTicker( void ) {
+  tickerPrusaFired = true;
+  tickerPrusaCounter++;
+  tickerPrusaMissed++;
 }
 
 void prnEspStats( void ) {
@@ -313,6 +320,13 @@ void setup() {
   tickerCamFired = true;
   oldTickerValue = waitTime;
 
+#ifdef PRUSA_CONNECT
+  tickerPrusaCounter = 0;
+  tickerPrusaMissed = 0;
+  tickerPrusa.attach( PRUSA_CONNECT_INTERVAL, funcPrusaTicker );
+  tickerPrusaFired = true;
+#endif
+
 #ifdef HAVE_BME280
   tickerBMECounter = 0;
   tickerBMEMissed = 0;
@@ -366,6 +380,24 @@ void loop() {
       log_e( "Missed %d tickers", tickerBMEMissed - 1 );
     }
     tickerBMEMissed = 0;
+
+  }
+#endif
+
+#ifdef PRUSA_CONNECT
+  if( tickerPrusaFired ) {
+    tickerPrusaFired = false;
+
+    fnElapsedStr( elapsedTimeString );
+    log_d( "PrusaConnect tick - %s", elapsedTimeString );
+
+    String htmlResponse = photoSendPrusaConnect();
+    log_d( "PrusaConnect response - %s", htmlResponse.c_str() );
+
+    if( tickerPrusaMissed > 1 ) {
+      log_e( "Missed %d tickers", tickerPrusaMissed - 1 );
+    }
+    tickerPrusaMissed = 0;
 
   }
 #endif
