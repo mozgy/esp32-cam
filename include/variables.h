@@ -3,11 +3,14 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.29.1"
+#define SW_VERSION "0.30.0"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
 #define CAM_SERIAL "2"
+
+#define PRUSA_CONNECT
+#define PRUSA_CONNECT_INTERVAL 90
 
 #define FLASH_ENABLED false
 
@@ -17,8 +20,6 @@
 
 #undef HAVE_BME280
 #define SEALEVELPRESSURE_HPA (1013.25)
-
-#define DBG_OUTPUT_PORT Serial
 
 extern String photoFrame;
 extern bool timeLapse;
