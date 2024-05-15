@@ -58,17 +58,17 @@ void prnEspStats( void ) {
   Serial.printf( "Sketch SW version: %s\n", SW_VERSION );
   Serial.printf( "Sketch size: %u\n", ESP.getSketchSize() );
   Serial.printf( "Sketch MD5: %u\n", ESP.getSketchMD5() );
+  Serial.printf( "SDK: %s\n", ESP.getSdkVersion() );
   Serial.printf( "Free size: %u\n", ESP.getFreeSketchSpace() );
   Serial.printf( "Heap: %u\n", ESP.getFreeHeap() );
   Serial.printf( "CPU: %uMHz\n", ESP.getCpuFreqMHz() );
-  Serial.printf( "Chip Revision: %u\n", ESP.getChipRevision() );
-  Serial.printf( "SDK: %s\n", ESP.getSdkVersion() );
-//  Serial.printf( "Flash ID: %u\n", ESP.getFlashChipId() );
-  Serial.printf( "Flash Size: %u\n", ESP.getFlashChipSize() );
-  Serial.printf( "Flash Speed: %u\n", ESP.getFlashChipSpeed() );
+  Serial.printf( "ESP32 Chip: Model = %s Rev %d\n", ESP.getChipModel(), ESP.getChipRevision() );
+  // Serial.printf( "Flash ID: %u\n", ESP.getFlashChipId() );
+  Serial.printf( "Flash: Size %u Speed %u\n", ESP.getFlashChipSize(), ESP.getFlashChipSpeed() );
   Serial.printf( "PSRAM Size: %u\n", ESP.getPsramSize() );
-//  Serial.printf( "Chip ID: %u\n", ESP.getChipId() );
-  chipid=ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
+  // Serial.printf( "Chip ID: %u\n", ESP.getChipId() ); // ESP8266 style
+  // uint64_t EspClass::getEfuseMac(void)
+  chipid = ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
   Serial.printf( "ESP32 Chip ID = %04X", (uint16_t)(chipid>>32) ); //print High 2 bytes
   Serial.printf( "%08X\n", (uint32_t)chipid );                     //print Low 4bytes.
 //  Serial.printf( "Vcc: %u\n", ESP.getVcc() );
@@ -313,11 +313,13 @@ void setup() {
   tickerCamFired = true;
   oldTickerValue = waitTime;
 
+#ifdef HAVE_BME280
   tickerBMECounter = 0;
   tickerBMEMissed = 0;
   tickerBME.attach( 61, funcBMETicker );
   tickerBMEFired = true;
   bme280Found = false;
+#endif
 
 }
 
@@ -350,18 +352,15 @@ void loop() {
     tickerCamMissed = 0;
   }
 
+#ifdef HAVE_BME280
   if( tickerBMEFired ) {
-
     tickerBMEFired = false;
 
     fnElapsedStr( elapsedTimeString );
-#ifdef HAVE_BME280
     if( bme280Found ) {
       bmeSerialPrint();
     }
-#else
     log_d( "BME280 tick - %s", elapsedTimeString );
-#endif
 
     if( tickerBMEMissed > 1 ) {
       log_e( "Missed %d tickers", tickerBMEMissed - 1 );
@@ -369,5 +368,6 @@ void loop() {
     tickerBMEMissed = 0;
 
   }
+#endif
 
 }
