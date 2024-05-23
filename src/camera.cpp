@@ -180,9 +180,14 @@ void flashON( void ) {
   if( !flashEnabled )
     return;
 
+#ifdef CAMERA_MODEL_AI_THINKER
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, HIGH );
-//  log_d( "Flash is ON, smile!" );
+#endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+#endif
+  log_d( "Flash is ON, smile!" );
 
 }
 
@@ -191,8 +196,21 @@ void flashON( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
+#ifdef CAMERA_MODEL_AI_THINKER
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, HIGH );
+#endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+#endif
+
+}
+
+void flashON( uint8_t R, uint8_t G, uint8_t B ) {
+
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, R, G, B );
+#endif
 
 }
 
@@ -206,8 +224,13 @@ void flashOFF( void ) {
   if( !flashEnabled )
     return;
 
+#ifdef CAMERA_MODEL_AI_THINKER
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, LOW );
+#endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, 0, 0 );
+#endif
 
 // DATA1 / Flash LED - PIN4
 // turn off AI-Thinker Board Flash LED
@@ -223,8 +246,13 @@ void flashOFF( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
+#ifdef CAMERA_MODEL_AI_THINKER
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, LOW );
+#endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, 0, 0 );
+#endif
 
 }
 

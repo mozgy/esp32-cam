@@ -318,7 +318,7 @@
 #define HREF_GPIO_NUM 7
 #define PCLK_GPIO_NUM 13
 
-#define LED_GPIO_NUM    -1  // TODO find pin
+#define LED_GPIO_NUM 48 // RGB LED NeoPixel
 
 #elif defined(CAMERA_MODEL_DFRobot_FireBeetle2_ESP32S3) || defined(CAMERA_MODEL_DFRobot_Romeo_ESP32S3)
 #define PWDN_GPIO_NUM     -1

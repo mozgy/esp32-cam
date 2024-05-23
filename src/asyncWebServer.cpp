@@ -397,7 +397,7 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
   } else if( variable == "timelapse" ) {
     timeLapse = !timeLapse;
   } else if( variable == "flashled" ) {
-#if defined( CAMERA_MODEL_AI_THINKER )
+#if defined(CAMERA_MODEL_AI_THINKER) || defined (CAMERA_MODEL_ESP32S3_CAM)
     flashEnabled = !flashEnabled;
 #else
     flashEnabled = false;

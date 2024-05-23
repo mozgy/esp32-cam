@@ -213,6 +213,10 @@ void setup() {
   // esp_wifi_internal_set_log_level(WIFI_LOG_VERBOSE);
   // esp_wifi_internal_set_log_mod(WIFI_LOG_MODULE_ALL, WIFI_LOG_SUBMODULE_ALL, true);
 
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, 0, 0 );
+#endif
+
   prnEspStats();
 
   if( !LittleFS.begin( true ) ) {
@@ -228,6 +232,10 @@ void setup() {
   wifiWaitTime = millis();
   getNTPTime();
 
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
+#endif
+
 #ifdef HAVE_SDCARD
   log_d( "Before initSDCard!" );
   delay( 10 );
@@ -235,15 +243,18 @@ void setup() {
   initSDCard( );  // *HAS* to be *before* initCam() if board has SDCard !
 #endif
 
-#ifndef CAMERA_MODEL_AI_THINKER
-  // using LED only on ESP32-CAM (originaly made by AI-Thinker)
-  flashEnabled = false;
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 #ifdef HAVE_CAMERA
   log_d( "Before initCam!" );
   delay( 10 );
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
+#endif
+
+#if !defined(CAMERA_MODEL_AI_THINKER) && !defined (CAMERA_MODEL_ESP32S3_CAM)
+  flashEnabled = false;
 #endif
 
 #ifdef HAVE_BME280
