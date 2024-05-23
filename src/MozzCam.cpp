@@ -258,7 +258,7 @@ void initSDCard( void ) {
 void setup() {
 
   Serial.begin( 115200 );
-  while( !Serial );   // TODO - rework all Serial outputs to log_info, log_error, log_debug
+  // while( !Serial );   // FIXME - commented as it loops on XIAO S3 without USB data connection
   delay( 400 );
   Serial.setDebugOutput( true );
   log_d( "Setup Start!" );
