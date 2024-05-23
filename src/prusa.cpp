@@ -18,7 +18,7 @@ String photoSendPrusaConnect( void ) {
   prusa.setTimeout( 1000 );
 
   prusa.connect( "connect.prusa3d.com", 443 );
-  prusa.println( "PUT https://connect.prusa3d.com/c/snapshot HTTP/1.0" );
+  prusa.println( "PUT https://connect.prusa3d.com/c/snapshot HTTP/1.1" );
   prusa.println( "Host: connect.prusa3d.com" );
   prusa.println( "User-Agent: ESP32-CAM Family" );
   prusa.println( "Connection: close" );
