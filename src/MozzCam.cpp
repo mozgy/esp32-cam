@@ -294,7 +294,7 @@ void setup() {
 
 void loop() {
 
-  ArduinoOTA.handle();  // FIXME - OTA not working for over #1000000 firmware.bin size
+  ArduinoOTA.handle();
 
   if( tickerCamFired ) {
     int wifiStatus;
