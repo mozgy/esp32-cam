@@ -354,9 +354,7 @@ void doSnapSavePhoto( void ) {
 
   photoFrameLength = photoFrameBuffer->len;
   // log_v( "Picture length : %d", photoFrameLength );
-  for( size_t i = 0; i < photoFrameLength; i++ ) {
-    photoFrame += (char) photoFrameBuffer->buf[ i ];
-  }
+  photoFrame += String( (char *) photoFrameBuffer->buf, photoFrameLength );
 
   //  //replace this with your own function
   //  process_image(fb->width, fb->height, fb->format, fb->buf, fb->len);
