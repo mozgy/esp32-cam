@@ -5,14 +5,6 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
-#define PART_BOUNDARY "123456789000000000000987654321"
-static const char *STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
-static const char *STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
-static const char *STREAM_PART = "Content-Type: %s\r\nContent-Length: %u\r\n\r\n";
-
-static const char *JPG_CONTENT_TYPE = "image/jpeg";
-static const char *BMP_CONTENT_TYPE = "image/x-windows-bmp";
-
 static const char *NOT_AUTHORIZED = "<!doctype html><html><head><meta http-equiv='refresh' content='20; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>Not Authorized!</body></html>";
 static const char *LOGIN_SUCCESS = "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>Login Success!</body></html>";
 static const char *HTML_NOT_FOUND = "<!doctype html><html><head><meta http-equiv='refresh' content='40; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>HTML File Not Found!</body></html>";

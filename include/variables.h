@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.30.2"
+#define SW_VERSION "0.30.3"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
