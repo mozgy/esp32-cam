@@ -1,9 +1,11 @@
 
 body {
   font-family: 'Comic Sans MS',cursive,sans-serif;
+  text-align:center;
   background: #181818;
   color: #EFEFEF;
-  font-size: 24px
+  font-size: 24px;
+  font-size: 4.8vw
 }
 
 .limiter {
