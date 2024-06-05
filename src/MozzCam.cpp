@@ -227,7 +227,6 @@ void setup() {
   }
 
   log_d( "Before initWiFi!" );
-  delay( 10 );
   initWiFi();
   wifiWaitTime = millis();
   getNTPTime();

@@ -4,6 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 include/credentials.h
+RasPi
 tmp
 firmware
 
