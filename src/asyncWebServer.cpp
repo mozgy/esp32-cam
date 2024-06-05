@@ -281,8 +281,9 @@ void asyncHandleESPReset( AsyncWebServerRequest *request ) {
 
   log_v( "Restarting in 5 seconds" );
   request->send( 200, "text/html", ESP_RESTART );
-  delay( 2000 );
-  WiFi.disconnect();
+  delay( 3000 );
+  // WiFi.disconnect();
+  // delay( 1000 );
   ESP.restart();
 
 }
