@@ -3,14 +3,11 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.30.3"
+#define SW_VERSION "0.30.4"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
-#define CAM_SERIAL "2"
-
-#define PRUSA_CONNECT
-#define PRUSA_CONNECT_INTERVAL 90
+#define CAM_SERIAL "1"
 
 #define FLASH_ENABLED false
 
@@ -21,13 +18,16 @@
 #undef HAVE_BME280
 #define SEALEVELPRESSURE_HPA (1013.25)
 
+#undef PRUSA_CONNECT
+#define PRUSA_CONNECT_INTERVAL 75
+
 extern String photoFrame;
 extern bool timeLapse;
 
 extern long timeZone;
 extern byte daySaveTime;
 
-extern int waitTime;
+extern int intervalTimeLapse;
 
 extern char elapsedTimeString[40];
 extern char currentDateTime[17];

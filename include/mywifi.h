@@ -13,8 +13,6 @@
 // #define CONFIG_ESP_WIFI_ENTERPRISE_SUPPORT 0
 
 #define WIFI_DISC_DELAY 30000L
-extern unsigned long wifiWaitTime;
-extern int wifiConnTries;
 
 extern void flashLED( uint32_t );
 extern void flashLED( uint32_t, bool );
@@ -25,5 +23,6 @@ void WiFiStationConnected( WiFiEvent_t , WiFiEventInfo_t );
 void WiFiGotIP( WiFiEvent_t, WiFiEventInfo_t );
 void WiFiStationDisconnected( WiFiEvent_t, WiFiEventInfo_t );
 void initWiFi( void );
+void initOTA( void );
 
 #endif

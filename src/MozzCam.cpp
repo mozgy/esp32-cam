@@ -34,7 +34,7 @@ bool bme280Found;
 Ticker tickerCam, tickerBME, tickerPrusa;
 boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
 int tickerCamCounter, tickerCamMissed;
-int waitTime = 60;
+int intervalTimeLapse = 60;
 int oldTickerValue;
 int tickerBMECounter, tickerBMEMissed;
 int tickerPrusaCounter, tickerPrusaMissed;
@@ -228,7 +228,7 @@ void setup() {
 
   log_d( "Before initWiFi!" );
   initWiFi();
-  wifiWaitTime = millis();
+  log_d( "Before NTP!" );
   getNTPTime();
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
@@ -270,9 +270,9 @@ void setup() {
 
   tickerCamCounter = 0;
   tickerCamMissed = 0;
-  tickerCam.attach( waitTime, funcCamTicker );
+  tickerCam.attach( intervalTimeLapse, funcCamTicker );
   tickerCamFired = true;
-  oldTickerValue = waitTime;
+  oldTickerValue = intervalTimeLapse;
 
 #ifdef PRUSA_CONNECT
   tickerPrusaCounter = 0;
@@ -309,10 +309,10 @@ void loop() {
     }
     fnElapsedStr( elapsedTimeString );
     log_d( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
-    if( oldTickerValue != waitTime ) {
+    if( oldTickerValue != intervalTimeLapse ) {
       tickerCam.detach( );
-      tickerCam.attach( waitTime, funcCamTicker );
-      oldTickerValue = waitTime;
+      tickerCam.attach( intervalTimeLapse, funcCamTicker );
+      oldTickerValue = intervalTimeLapse;
     }
     if( tickerCamMissed > 1 ) {
       log_e( "Missed %d tickers", tickerCamMissed - 1 );
