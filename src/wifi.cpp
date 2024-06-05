@@ -6,10 +6,6 @@
 #include "mywifi.h"
 #include "credentials.h"
 
-unsigned long wifiWaitTime;
-int wifiSTATries;
-bool wifi5G = false;
-
 /*
 void waitForConnect( unsigned long timeout ) {
 
@@ -125,21 +121,18 @@ void initOTA( void ) {
 
 void initWiFi( void ) {
 
-  wifiSTATries = 1;
-  bool wifiNoSTA = false;
-
 #ifdef CAMERA_MODEL_AI_THINKER
   flashLED( 300, true ); delay( 80 ); flashLED( 300, true );
 #endif
   WiFi.softAPdisconnect( true );
-  WiFi.disconnect( true );
+//  WiFi.disconnect( true );
   WiFi.setMinSecurity( WIFI_AUTH_WPA_PSK );
-  esp_wifi_set_storage( WIFI_STORAGE_RAM );
-  // esp_wifi_set_storage( WIFI_STORAGE_FLASH );
-  uint32_t brown_reg_tmp = READ_PERI_REG( RTC_CNTL_BROWN_OUT_REG );
-  WRITE_PERI_REG( RTC_CNTL_BROWN_OUT_REG, 0 );
+//  esp_wifi_set_storage( WIFI_STORAGE_RAM );
+//  // esp_wifi_set_storage( WIFI_STORAGE_FLASH );
+//  uint32_t brown_reg_tmp = READ_PERI_REG( RTC_CNTL_BROWN_OUT_REG );
+//  WRITE_PERI_REG( RTC_CNTL_BROWN_OUT_REG, 0 );
   WiFi.mode( WIFI_STA );
-  WRITE_PERI_REG( RTC_CNTL_BROWN_OUT_REG, brown_reg_tmp );
+//  WRITE_PERI_REG( RTC_CNTL_BROWN_OUT_REG, brown_reg_tmp );
   WiFi.onEvent( WiFiStationConnected, ARDUINO_EVENT_WIFI_STA_CONNECTED );
   WiFi.onEvent( WiFiGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP );
   WiFi.onEvent( WiFiStationDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED );
