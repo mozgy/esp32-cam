@@ -33,11 +33,11 @@ bool bme280Found;
 
 Ticker tickerCam, tickerBME, tickerPrusa;
 boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
-int tickerCamCounter, tickerCamMissed;
+u_int32_t tickerCamCounter, tickerCamMissed;
 int intervalTimeLapse = 60;
 int oldTickerValue;
-int tickerBMECounter, tickerBMEMissed;
-int tickerPrusaCounter, tickerPrusaMissed;
+u_int32_t tickerBMECounter, tickerBMEMissed;
+u_int32_t tickerPrusaCounter, tickerPrusaMissed;
 
 void funcCamTicker( void ) {
   tickerCamFired = true;
@@ -203,7 +203,7 @@ void setup() {
 
   Serial.begin( 115200 );
   // while( !Serial );   // FIXME - commented as it loops on XIAO S3 without USB data connection
-  delay( 400 );
+  delay( 600 );
   Serial.setDebugOutput( true );
   log_d( "Setup Start!" );
   // WiFi.printDiag(Serial); // research this
@@ -214,7 +214,7 @@ void setup() {
   // esp_wifi_internal_set_log_mod(WIFI_LOG_MODULE_ALL, WIFI_LOG_SUBMODULE_ALL, true);
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, 0, 0 );
+//  neopixelWrite( FLASH_LED, (RGB_BRIGHTNESS >> 1), 0, 0 );
 #endif
 
   prnEspStats();
@@ -237,7 +237,6 @@ void setup() {
 
 #ifdef HAVE_SDCARD
   log_d( "Before initSDCard!" );
-  delay( 10 );
   // [E][SD_MMC.cpp:132] begin(): Failed to mount filesystem. If you want the card to be formatted, set format_if_mount_failed = true.
   initSDCard( );  // *HAS* to be *before* initCam() if board has SDCard !
 #endif
@@ -248,7 +247,6 @@ void setup() {
 
 #ifdef HAVE_CAMERA
   log_d( "Before initCam!" );
-  delay( 10 );
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
 #endif
 
@@ -258,11 +256,9 @@ void setup() {
 
 #ifdef HAVE_BME280
   log_d( "Before initBME!" );
-  delay( 10 );
   initBME();  // *HAS* to be *after* initSDCard() if board has SDCard ! Hmm, maybe not before
 #endif
 
-  delay( 10 );
   log_d( "Before initAsyncWebServer!" );
   initAsyncWebServer();
   log_d( "Before initOTA!" );
@@ -296,12 +292,11 @@ void loop() {
   ArduinoOTA.handle();
 
   if( tickerCamFired ) {
-    int wifiStatus;
     tickerCamFired = false;
 #ifdef HAVE_CAMERA
     doSnapSavePhoto();
 #endif
-    wifiStatus = WiFi.status();
+    int wifiStatus = WiFi.status();
     log_d( "%s", get_wifi_status( wifiStatus ) );
     log_i( "(RSSI): %d dBm, MAC=%s", WiFi.RSSI(), WiFi.macAddress().c_str() );
     if( WiFi.status() == WL_CONNECTED ) {
