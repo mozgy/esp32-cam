@@ -12,7 +12,7 @@ String getHTMLRootText( void ) {
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
-  webText += "<p><a href=/stats>Statistics</a>";
+  webText += "<p><a href=/stats>Info</a>";
   webText += "<br><a href=/setup>Setup</a>";
   webText += "</body></html>";
 
@@ -37,7 +37,7 @@ String getHTMLStatisticsText( void ) {
     webText += String( tmpStr );
   }
 #endif
-  webText += "<br>Time Period " + String( waitTime );
+  webText += "<br>Time Lapse Period " + String( intervalTimeLapse );
   webText += "</body></html>";
 
   return webText; // TODO - make me pwetty !
