@@ -10,6 +10,9 @@ static const char *LOGIN_SUCCESS = "<!doctype html><html><head><meta http-equiv=
 static const char *HTML_NOT_FOUND = "<!doctype html><html><head><meta http-equiv='refresh' content='40; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>HTML File Not Found!</body></html>";
 static const char *SD_CARD_REMOUNT = "<!doctype html><html><head><meta http-equiv='refresh' content='8; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>SD Card Remount!</body></html>";
 static const char *ESP_RESTART = "<!doctype html><html><head><meta http-equiv='refresh' content='20; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>ESP32 Restart!</body></html>";
+static const char *WRONG_INPUT = "<!doctype html><html><head><meta http-equiv='refresh' content='10; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>Wrong Input Parameter!</body></html>";
+static const char *TIME_LAPSE_ACTIVE = "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/setup'></head><body>Time Lapse Active!</body></html>";
+
 static const char *HTML_HEAD = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head>";
 
 extern AsyncWebServer asyncWebServer;

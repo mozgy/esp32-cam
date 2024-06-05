@@ -113,7 +113,7 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
   response->addHeader( "Content-Disposition", "inline; filename=photo.jpg" );
   response->addHeader( "Access-Control-Allow-Origin", "*" );
   response->addHeader( "X-Timestamp", value );
-/* this has to be inside capture {}
+/* this has to be inside capture {} or _not_
   char ts[32];
   snprintf(ts, 32, "%lld.%06ld", fb->timestamp.tv_sec, fb->timestamp.tv_usec);
   response->addHeader( "X-Timestamp", (const char *)ts );
@@ -141,10 +141,21 @@ void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
 void asyncHandleStream( AsyncWebServerRequest *request ) {
 
+  if( !request->authenticate( http_username, http_password ) ) {
+    // request->send( 200, "text/html", NOT_AUTHORIZED );
+    request->send( LittleFS.open( "/NotAuth.jpg" ), "/NotAuth.jpg", "image/jpg" );
+    return;
+  }
+
   log_d( " asyncHandleStream " );
 
-  if ( timeLapse ) {  // FIXME: display a picture instead
-    request->send( 200, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='6; URL=/setup'></head><body>Time Lapse Active!</body></html>" );
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 12, 0, 0 ); // turn ON faint RED :)
+#endif
+
+  if ( timeLapse ) {
+    // request->send( 200, "text/html", TIME_LAPSE_ACTIVE );
+    request->send( LittleFS.open( "/TLActive.jpg" ), "/TLActive.jpg", "image/jpg" );
     return;
   }
   AsyncJpegStreamResponse *response = new AsyncJpegStreamResponse();
@@ -168,7 +179,7 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
       value = arg->value();
     }
   } else {
-    request->send( 500, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='10; URL=/'></head><body>Wrong Input Parameter!</body></html>" );
+    request->send( 500, "text/html", WRONG_INPUT );
     return;
   }
 
@@ -215,7 +226,7 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
   }
 
   if( err ) {
-    request->send( 500, "text/html", "<!doctype html><html><head><meta http-equiv='refresh' content='10; URL=/'></head><body>Wrong Input Parameter!</body></html>" );
+    request->send( 500, "text/html", WRONG_INPUT );
     return;
   }
 
@@ -277,6 +288,11 @@ void asyncHandleESPReset( AsyncWebServerRequest *request ) {
 }
 
 void asyncHandleArchive( AsyncWebServerRequest *request ) {
+
+  if( !request->authenticate( http_username, http_password ) ) {
+    request->send( 200, "text/html", NOT_AUTHORIZED );
+    return;
+  }
 
   listDirectory( "/mozz-cam", request );
 
