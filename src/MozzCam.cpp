@@ -59,8 +59,6 @@ void funcPrusaTicker( void ) {
 
 void prnEspStats( void ) {
 
-  uint64_t chipid;
-
   Serial.println();
   Serial.printf( "Sketch SW version: %s\n", SW_VERSION );
   Serial.printf( "Sketch size: %u\n", ESP.getSketchSize() );
@@ -74,8 +72,7 @@ void prnEspStats( void ) {
   Serial.printf( "Flash: Size %u Speed %u\n", ESP.getFlashChipSize(), ESP.getFlashChipSpeed() );
   Serial.printf( "PSRAM Size: %u\n", ESP.getPsramSize() );
   // Serial.printf( "Chip ID: %u\n", ESP.getChipId() ); // ESP8266 style
-  // uint64_t EspClass::getEfuseMac(void)
-  chipid = ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
+  uint64_t chipid = ESP.getEfuseMac(); //The chip ID is essentially its MAC address(length: 6 bytes).
   Serial.printf( "ESP32 Chip ID = %04X", (uint16_t)(chipid>>32) ); //print High 2 bytes
   Serial.printf( "%08X\n", (uint32_t)chipid );                     //print Low 4bytes.
 //  Serial.printf( "Vcc: %u\n", ESP.getVcc() );
@@ -204,9 +201,9 @@ void setup() {
   Serial.begin( 115200 );
   // while( !Serial );   // FIXME - commented as it loops on XIAO S3 without USB data connection
   delay( 600 );
-  Serial.setDebugOutput( true );
+  // Serial.setDebugOutput( true );
   log_d( "Setup Start!" );
-  // WiFi.printDiag(Serial); // research this
+  // WiFi.printDiag(Serial); // CRASH - Guru Meditation Error
 
   // set these three lines above BEFORE AND AFTER the call to esp_wifi_init
   // esp_log_level_set("wifi", ESP_LOG_VERBOSE);
@@ -313,6 +310,10 @@ void loop() {
       log_e( "Missed %d tickers", tickerCamMissed - 1 );
     }
     tickerCamMissed = 0;
+#ifdef ARDUINO_ESP32S3_DEV
+    float temp_celsius = temperatureRead();
+    log_i( "Temp onBoard %.2f°C", temp_celsius );
+#endif
   }
 
 #ifdef HAVE_BME280
