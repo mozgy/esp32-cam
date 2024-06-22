@@ -6,19 +6,6 @@
 #include "mywifi.h"
 #include "credentials.h"
 
-/*
-void waitForConnect( unsigned long timeout ) {
-
-  unsigned long timeWiFi = millis();
-
-  while( WiFi.status() != WL_CONNECTED ) {
-    if( ( millis() - timeWiFi ) > timeout )
-      break;
-  }
-
-}
-  */
-
 String get_wifi_status( int status ) {
   switch( status ) {
     case WL_IDLE_STATUS:
