@@ -11,9 +11,8 @@ String getHTMLRootText( void ) {
   // webText = String( HTML_HEAD ) + "<body>";
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
-  webText += "Software Version " + String( SW_VERSION ) + "<br>";
-  webText += "<p><a href=/stats>Info</a>";
-  webText += "<br><a href=/setup>Setup</a>";
+  webText += "<a href=/stats>Info</a><br>";
+  webText += "<a href=/setup>Setup</a>";
   webText += "</body></html>";
 
   return webText; // TODO - make me pwetty !
@@ -28,16 +27,21 @@ String getHTMLStatisticsText( void ) {
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
-  fnElapsedStr( elapsedTimeString );
-  webText += String( elapsedTimeString );
-// log_v( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
+  webText += "<br>SDK: " + String( ESP.getSdkVersion() );
+  webText += "<br>ESP32 Chip: Model = " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
 #ifdef HAVE_SDCARD
   if ( SDCardOK ) {
     sprintf( tmpStr, "<br>Total space: %lluMB - Used space %lluMB\n", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
     webText += String( tmpStr );
   }
 #endif
-  webText += "<br>Time Lapse Period " + String( intervalTimeLapse );
+  webText += "<br>Time Lapse Period " + String( intervalTimeLapse ) + "sec";
+#ifdef PRUSA_CONNECT
+  webText += "<br>Prusa Connect Active - " + String( PRUSA_CONNECT_INTERVAL ) + "sec";
+#endif
+  fnElapsedStr( elapsedTimeString );
+  webText += String( elapsedTimeString );
+// log_v( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
   webText += "</body></html>";
 
   return webText; // TODO - make me pwetty !
