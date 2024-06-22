@@ -21,6 +21,16 @@ AsyncWebServer asyncWebServer(8080);
 extern bool timeLapse;
 // AsyncJpegStreamResponse *streamActive;
 
+bool checkWebAuth( AsyncWebServerRequest *request ) {
+
+  if( !request->authenticate( http_username, http_password ) ) {
+    request->send( 200, "text/html", NOT_AUTHORIZED );
+    return false;
+  }
+  return true;
+
+}
+
 void asyncHandleRoot( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleRoot " );
@@ -53,10 +63,8 @@ void asyncHandleStatus( AsyncWebServerRequest *request ) {
 
 void asyncHandleFullSetup( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
   log_d( " asyncHandleFullSetup " );
 
@@ -92,7 +100,7 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
     if( value != http_password ) {
     }
   }
-  if( !request->authenticate( http_username, http_password ) )
+  if( !checkWebAuth( request ) )
     return request->requestAuthentication();  // Hm? Double-check this return ..
   request->send( 200, "text/html", LOGIN_SUCCESS );
 
@@ -141,8 +149,7 @@ void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
 void asyncHandleStream( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    // request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) ) {
     request->send( LittleFS.open( "/NotAuth.jpg" ), "/NotAuth.jpg", "image/jpg" );
     return;
   }
@@ -226,7 +233,7 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
   }
 
   if( err ) {
-    request->send( 500, "text/html", WRONG_INPUT );
+    request->send( 500, "text/html", WRONG_INPUT ); // ToDo: add css
     return;
   }
 
@@ -238,10 +245,8 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
 
 void asyncHandleScan( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
 //First request will return 0 results unless you start scan from somewhere else (loop/setup)
 //Do not request more often than 3-5 seconds
@@ -274,10 +279,8 @@ void asyncHandleScan( AsyncWebServerRequest *request ) {
 
 void asyncHandleESPReset( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
   log_v( "Restarting in 5 seconds" );
   request->send( 200, "text/html", ESP_RESTART );
@@ -290,10 +293,8 @@ void asyncHandleESPReset( AsyncWebServerRequest *request ) {
 
 void asyncHandleArchive( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
   listDirectory( "/mozz-cam", request );
 
@@ -301,10 +302,8 @@ void asyncHandleArchive( AsyncWebServerRequest *request ) {
 
 void asyncHandleSDCardRemount( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
   log_d( " asyncHandleSDCardRemount " );
 
@@ -319,10 +318,8 @@ void asyncHandleSDCardRemount( AsyncWebServerRequest *request ) {
 
 void asyncHandleDelete( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
-    request->send( 200, "text/html", NOT_AUTHORIZED );
+  if( !checkWebAuth( request ) )
     return;
-  }
 
   String webText;
 
@@ -333,7 +330,7 @@ void asyncHandleDelete( AsyncWebServerRequest *request ) {
   webText = "ToDelete - ";
   webText += fileName;
   request->send( 200, "text/plain", webText );
-  return;
+  return;   // Gate closed - need to retest spam load on SDCard
 
 //  deleteFile( SD_MMC, fileName );
   if( SD_MMC.remove( fileName.c_str() ) ) {
