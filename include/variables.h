@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.30.4"
+#define SW_VERSION "0.30.5"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
@@ -23,11 +23,10 @@
 
 extern String photoFrame;
 extern bool timeLapse;
+extern int intervalTimeLapse;
 
 extern long timeZone;
 extern byte daySaveTime;
-
-extern int intervalTimeLapse;
 
 extern char elapsedTimeString[40];
 extern char currentDateTime[17];
@@ -35,7 +34,5 @@ extern char currentDateTime[17];
 extern void bmeSerialPrint( void );
 extern void initBME( void );
 extern bool bme280Found;
-
-extern void initOTA( void );
 
 #endif
