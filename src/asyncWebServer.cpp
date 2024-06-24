@@ -100,7 +100,7 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
     if( value != http_password ) {
     }
   }
-  if( !checkWebAuth( request ) )
+  if( !request->authenticate( http_username, http_password ) )
     return request->requestAuthentication();  // Hm? Double-check this return ..
   request->send( 200, "text/html", LOGIN_SUCCESS );
 
