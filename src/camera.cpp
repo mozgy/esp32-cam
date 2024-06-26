@@ -120,6 +120,7 @@ String getCameraStatus( void ) {
   jsonResponse += ( timeLapse ) ? "1" : "0";
   jsonResponse += ",\"flashled\":";
   jsonResponse += ( flashEnabled ) ? "1" : "0";
+  jsonResponse += ",\"rotation\":" + String( imageRotation );
   jsonResponse += "}";
 
   log_d( "%s", jsonResponse.c_str() );
@@ -279,7 +280,7 @@ void flashLED( uint32_t flashONTime, bool forcedFlash ) {
 
 }
 
-// void doSnapPhoto( void ) {
+// CAVEAT - capture *will* fail if stream is active - FIXME!
 void doSnapSavePhoto( void ) {
 
   File photoFP;
@@ -354,22 +355,80 @@ void doSnapSavePhoto( void ) {
 
   photoFrameLength = photoFrameBuffer->len;
   // log_v( "Picture length : %d", photoFrameLength );
-  photoFrame += String( (char *) photoFrameBuffer->buf, photoFrameLength );
+
+  if( imageRotation == 1 || timeLapse ) {    // 1 == top-left aka no rotation
+    photoFrame += String( (char *) photoFrameBuffer->buf, photoFrameLength );
+  } else {
+    // insert Exif data here
+    photoFrame += '\xff';
+    photoFrame += '\xd8';
+    photoFrame += '\xff';
+    photoFrame += '\xe1';
+    photoFrame += '\x00';
+    photoFrame += '\x26';
+    photoFrame += "Exif";
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x49';
+    photoFrame += '\x49';
+    photoFrame += '\x2a';
+    photoFrame += '\x00';
+    photoFrame += '\x08';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x01';
+    photoFrame += '\x00';
+    photoFrame += '\x12';
+    photoFrame += '\x01';
+    photoFrame += '\x03';
+    photoFrame += '\x00';
+    photoFrame += '\x01';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += (char)imageRotation;
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+    photoFrame += '\x00';
+/*
+  '\xff', '\xd8',                   // JPEG SOI
+  '\xff', '\xe1',                   // Exif APP1
+  '\x00', '\x26',                   // length
+  'Exif', '\x00', '\x00',           // Exif header
+  '\x49', '\x49', '\x2a', '\x00',   // TIFF header
+  '\x08', '\x00', '\x00', '\x00',
+  '\x01', '\x00',                   // only one IFD0 entry
+  '\x12', '\x01',                   // TagTiffOrientation 0x0112
+  '\x03', '\x00',
+  '\x01', '\x00', '\x00', '\x00',
+  (uint8_t imageRotation), '\x00', '\x00', '\x00',   // 1 - 0, 3 - 180, 6 - 90, 8 - 270
+  '\x00', '\x00', '\x00', '\x00',   // end of IFD0 marker
+  '\x00', '\x00', '\x00', '\x00'    // end of Exif data marker
+  */
+    photoFrame += String( ( (char *) photoFrameBuffer->buf ) + 2, photoFrameLength - 2 );
+    photoFrameLength += 38;         // TODO - put all above into nice struct so length can be compile time calculated
+  }
 
   //  //replace this with your own function
   //  process_image(fb->width, fb->height, fb->format, fb->buf, fb->len);
   if( timeLapse && SDCardOK ) {
     photoFP.write( photoFrameBuffer->buf, photoFrameLength );
+    photoFP.close();
     log_d( "Time Lapse ON - Wrote File - Used space: %lluMB", SD_MMC.usedBytes() / (1024 * 1024) );
   }
 
   //return the frame buffer back to the driver for reuse
   esp_camera_fb_return( photoFrameBuffer );
   photoFrameBuffer = NULL;
-
-  if( timeLapse && SDCardOK ) {
-    photoFP.close();
-  }
 
   int64_t capture_end = esp_timer_get_time();
   log_d( "Capture Time: %uB %ums", (uint32_t)( photoFrameLength ), (uint32_t)( ( capture_end - capture_start )/1000 ) );

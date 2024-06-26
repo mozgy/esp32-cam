@@ -6,6 +6,7 @@
 
 typedef const String picSizeStrings_t;
 extern size_t photoFrameLength;
+extern uint8_t imageRotation;
 
 #include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "camera_pins.h"

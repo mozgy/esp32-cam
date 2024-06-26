@@ -228,6 +228,8 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
 #else
     flashEnabled = false;
 #endif
+  } else if( variable == "rotation" ) {
+    imageRotation = valueNum;
   } else {
     err = -1;
   }
