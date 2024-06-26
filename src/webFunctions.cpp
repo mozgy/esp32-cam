@@ -28,7 +28,7 @@ String getHTMLStatisticsText( void ) {
   webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
   webText += "<br>SDK: " + String( ESP.getSdkVersion() );
-  webText += "<br>ESP32 Chip: Model = " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
+  webText += "<br>ESP32 Chip: " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
 #ifdef HAVE_SDCARD
   if ( SDCardOK ) {
     sprintf( tmpStr, "<br>Total space: %lluMB - Used space %lluMB\n", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
@@ -40,7 +40,7 @@ String getHTMLStatisticsText( void ) {
   webText += "<br>Prusa Connect Active - " + String( PRUSA_CONNECT_INTERVAL ) + "sec";
 #endif
   fnElapsedStr( elapsedTimeString );
-  webText += String( elapsedTimeString );
+  webText += "<br>" + String( elapsedTimeString );
 // log_v( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
   webText += "</body></html>";
 
