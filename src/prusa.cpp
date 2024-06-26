@@ -6,11 +6,10 @@
 #include "credentials.h"
 #include "certificate.h"
 
+#define SEND_BLOCK_SIZE 1024
 extern String photoFrameLength;
 
 String photoSendPrusaConnect( void ) {
-
-#define SEND_BLOCK_SIZE 1024
 
   WiFiClientSecure prusa;
 
