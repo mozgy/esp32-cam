@@ -13,8 +13,8 @@
       - wait for VSC doing some install magic and probably few GUI restarts
 
   1. Check the defines
-      - check the file <a href=include/credentials_sample.h>Credentials Sample</a>, fill it with actual credentials and rename the file to credentials.h.
-      - check the file <a href=include/variables.h>Config Definitions</a> and change appropriate #defines
+      - check the file <a href=../include/credentials_sample.h>Credentials Sample</a>, fill it with actual credentials and rename the file to credentials.h.
+      - check the file <a href=../include/variables.h>Config Definitions</a> and change appropriate #defines
 
   1. Compile the sources
       - click 'PlatformIO' icon on the left
