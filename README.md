@@ -22,23 +22,7 @@ ESP32-CAM board with OV2640 camera module, there are several hardware versions o
 Insert ESP32-CAM into helper board and connect it to PC.
 
 ### Visual Studio Code with PlatformIO IDE
-Open Visual Studio Code and choose 'Open Folder' where this source is unpacked. If this is the very first time using PlatformIO, VSC will do some install and config magic and probably few GUI restarts.
-Before compiling check file include/credentials_sample.h, fill it with actual WiFi credentials and rename the file to credentials.h.
-Next check file platformio.ini for upload/flashing details, first time should be wire connection -
-```
-; upload_port = 192.168.x.y
-; upload_protocol = espota
-upload_protocol = esptool
-```
-after succesfull first flash OTA is also possible, 'Serial Monitor' option can be used to find out DHCP assigned IP -
-```
-upload_port = 192.168.x.y
-upload_protocol = espota
-; upload_protocol = esptool
-```
-Two more steps and we're done -
-- Explorer - PlatformIO: Upload
-- PlatformIO - esp32cam - Upload Filesystem Image
+<a href=doc/vsc.md>VSC with PlatformIO</a>
 
 ### Arduino IDE
 Gremlins ate this part - rewrite needed ..
