@@ -219,15 +219,10 @@ void setup() {
 
   if( !LittleFS.begin( true ) ) {
     log_d( "Formatting LittleFS" );
-    if( !LittleFS.begin( ) ) {
+    if( !LittleFS.begin() ) {
       log_e( "An Error has occurred while mounting LittleFS" );
     }
   }
-
-  log_d( "Before initWiFi!" );
-  initWiFi();
-  log_d( "Before NTP!" );
-  getNTPTime();
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
   neopixelWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
@@ -238,6 +233,15 @@ void setup() {
   // [E][SD_MMC.cpp:132] begin(): Failed to mount filesystem. If you want the card to be formatted, set format_if_mount_failed = true.
   initSDCard( );  // *HAS* to be *before* initCam() if board has SDCard !
 #endif
+
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
+#endif
+
+  log_d( "Before initWiFi!" );
+  initWiFi();
+  log_d( "Before NTP!" );
+  getNTPTime();
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
   neopixelWrite( FLASH_LED, 0, 0, 0 );
