@@ -25,8 +25,10 @@ bool checkWebAuth( AsyncWebServerRequest *request ) {
 
   if( !request->authenticate( http_username, http_password ) ) {
     request->send( 200, "text/html", NOT_AUTHORIZED );
+    log_d("auth-false");
     return false;
   }
+  log_d("auth-true");
   return true;
 
 }
@@ -313,6 +315,7 @@ void asyncHandleSDCardRemount( AsyncWebServerRequest *request ) {
   SD_MMC.end();
   delay( 1000 );
   initSDCard();
+  // FOOD_FOR_THOUGHT - load config here ??
   request->send( 200, "text/html", SD_CARD_REMOUNT );
 #endif
 
