@@ -1,6 +1,7 @@
 .pio
 .vscode
 include/credentials.h
+doc/config
 RasPi
 tmp
 firmware
