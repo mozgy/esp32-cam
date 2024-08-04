@@ -6,6 +6,7 @@
 #include <LittleFS.h>
 #include <FS.h>
 #include <SD_MMC.h>
+#include <ArduinoJson.h>
 #include <Ticker.h>
 #include <ArduinoOTA.h>
 
@@ -129,6 +130,58 @@ void getNTPTime( void ) {
 
 }
 
+esp_err_t loadConfigFromSD( void ) {
+
+  File configFP;
+  JsonDocument cameraConfig;
+  String configParam;
+
+  if( !SDCardOK ) {
+    log_e( "SD Card not found!" );
+    return ESP_ERR_NOT_FOUND;
+  }
+
+  configFP = SD_MMC.open( "/config", FILE_READ );
+  if( !configFP ) {
+    log_e( "Cannot open config file!" );
+    return ESP_FAIL;
+  }
+
+  DeserializationError jsonError = deserializeJson( cameraConfig, configFP );
+  if( jsonError ) {
+    log_e( "Failed to read file, using default configuration" );
+    return ESP_FAIL;
+  }
+
+  // json {"http_username":"x","http_password":"y","wifi_ssid":"x","wifi_password":"y" \
+  //       ,"camera_name":"1","flash":"off","timelapse":"off","prusa_connect":"off"}
+
+  configParam = String( cameraConfig["flash"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    if( configParam == "on" )
+      flashEnabled = true;
+    else
+      flashEnabled = false;
+  }
+  configParam = String( cameraConfig["timelapse"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    if( configParam == "on" )
+      timeLapse = true;
+    else
+      timeLapse = false;
+  }
+  configParam = String( cameraConfig["camera_name"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    cameraNameSuffix = configParam;
+  }
+
+  return ESP_OK;
+
+}
+
 void initSDCard( void ) {
 
 // bool setPins(int clk, int cmd, int d0);
@@ -170,6 +223,8 @@ void initSDCard( void ) {
 
   if( cardType == CARD_NONE ) {
     log_e( "No SD card attached" );
+    SDCardOK = false;
+    timeLapse = false;
     return;
   }
 
@@ -233,7 +288,8 @@ void setup() {
 #ifdef HAVE_SDCARD
   log_d( "Before initSDCard!" );
   // [E][SD_MMC.cpp:132] begin(): Failed to mount filesystem. If you want the card to be formatted, set format_if_mount_failed = true.
-  initSDCard( );  // *HAS* to be *before* initCam() if board has SDCard !
+  initSDCard();  // *HAS* to be *before* initCam() if board has SDCard !
+  loadConfigFromSD();
 #endif
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM

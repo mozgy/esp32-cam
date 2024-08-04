@@ -54,6 +54,13 @@ void asyncHandleMetrics( AsyncWebServerRequest *request ) {
 
 }
 
+void asyncHandleFileConfig( AsyncWebServerRequest *request ) {
+
+  log_d( " asyncHandleFileConfig " );
+  request->send( 200, "text/html", NOT_AUTHORIZED ); // reading config file always forbidden through web!
+
+}
+
 void asyncHandleStatus( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleStatus " );
@@ -413,6 +420,7 @@ void initAsyncWebServer( void ) {
 
   asyncWebServer.on( "/fullsetup", HTTP_GET, asyncHandleFullSetup );
   asyncWebServer.on( "/status", HTTP_GET, asyncHandleStatus );
+  asyncWebServer.on( "/config", HTTP_GET, asyncHandleFileConfig );
 
   asyncWebServer.on( "/control", HTTP_POST, asyncHandleCommand );
   asyncWebServer.on( "/capture", HTTP_GET, asyncHandleCapture );
