@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.33.0"
+#define SW_VERSION "0.33.1"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
@@ -20,6 +20,8 @@
 
 #undef PRUSA_CONNECT
 #define PRUSA_CONNECT_INTERVAL 75
+
+extern String cameraNameSuffix;
 
 extern String photoFrame;
 extern bool timeLapse;

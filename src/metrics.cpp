@@ -17,7 +17,7 @@ String getMetricsText( void ) {
   webText = "# TYPE esp_cam_info counter\n";
   webText += "esp_cam_info " + String( tickerCamCounter ) + "\n";
   webText += "# TYPE esp_cam_info_id gauge\n";
-  webText += "esp_cam_info_id " + String( CAM_SERIAL ) + "\n";
+  webText += "esp_cam_info_id " + cameraNameSuffix + "\n";
   webText += "# TYPE esp_cam_info_photo_len gauge\n";
   webText += "esp_cam_info_photo_len " + String( photoFrameLength ) + "\n";
   webText += "# TYPE esp_cam_info_rssi gauge\n";

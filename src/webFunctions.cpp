@@ -10,7 +10,7 @@ String getHTMLRootText( void ) {
 
   // webText = String( HTML_HEAD ) + "<body>";
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
-  webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
+  webText += "Cam-" + cameraNameSuffix + "<br>";
   webText += "<a href=/stats>Info</a><br>";
   webText += "<a href=/setup>Setup</a>";
   webText += "</body></html>";
@@ -25,7 +25,7 @@ String getHTMLStatisticsText( void ) {
   char tmpStr[80];
 
   webText = "<!doctype html><html><head><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>";
-  webText += "Cam-" + String( CAM_SERIAL ) + "<br>";
+  webText += "Cam-" + cameraNameSuffix + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
   webText += "<br>SDK: " + String( ESP.getSdkVersion() );
   webText += "<br>ESP32 Chip: " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
@@ -168,7 +168,7 @@ String listDirectoryAsString( File path ) {
   String webText;
   int numPic = 0;
 
-  webText = "<!doctype html><html><head><title>Cam " + String( CAM_SERIAL ) + "</title>";
+  webText = "<!doctype html><html><head><title>Cam " + cameraNameSuffix + "</title>";
   webText += "<meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'>";
   webText += "<link rel='stylesheet' type='text/css' href='mozz.css'></head>";
   webText += "<body><div class='limiter'><div class='container-tableCam'><div class='wrap-tableCam'>";

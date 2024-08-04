@@ -59,7 +59,7 @@ void initOTA( void ) {
   String hostName;
   hostName = ESP_CAM_HOSTNAME;
   hostName += "-";
-  hostName += CAM_SERIAL;
+  hostName += cameraNameSuffix;
   ArduinoOTA.setHostname( hostName.c_str() );
 
   // No authentication by default

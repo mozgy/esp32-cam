@@ -22,6 +22,8 @@ struct tm startTime;
 char elapsedTimeString[40];
 char currentDateTime[17];
 
+String cameraNameSuffix = CAM_SERIAL;
+
 String photoFrame;
 size_t photoFrameLength;
 uint8_t imageRotation = 1; /* 1 - 0, 3 - 180, 6 - 90, 8 - 270 */
