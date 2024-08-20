@@ -4,6 +4,8 @@
 #include "variables.h"
 #include "mywebserver.h"
 
+extern String prusaResponseCode;
+
 String getHTMLRootText( void ) {
 
   String webText;
@@ -37,7 +39,18 @@ String getHTMLStatisticsText( void ) {
 #endif
   webText += "<br>Time Lapse Period " + String( intervalTimeLapse ) + "sec";
 #ifdef PRUSA_CONNECT
-  webText += "<br>Prusa Connect Active - " + String( PRUSA_CONNECT_INTERVAL ) + "sec";
+  webText += "<br>Prusa Connect ";
+  if( prusaConnectActive ) {
+    webText += "Active";
+    if( prusaPrinterOnline ) {
+      webText += " - " + String( prusaConnectInterval ) + "sec";
+      webText += "<br>Prusa HTML " + prusaResponseCode;
+    } else {
+      webText += " - printer OFFline";
+    }
+  } else {
+    webText += "Disabled";
+  }
 #endif
   fnElapsedStr( elapsedTimeString );
   webText += "<br>" + String( elapsedTimeString );

@@ -35,6 +35,10 @@ bool SDCardOK;
 
 bool bme280Found;
 
+bool prusaConnectActive = false;
+String prusaHTMLResponse;
+String prusaResponseCode;
+
 Ticker tickerCam, tickerBME, tickerPrusa;
 boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
 u_int32_t tickerCamCounter, tickerCamMissed;
@@ -42,6 +46,7 @@ int intervalTimeLapse = 60;
 int oldTickerValue;
 u_int32_t tickerBMECounter, tickerBMEMissed;
 u_int32_t tickerPrusaCounter, tickerPrusaMissed;
+u_int16_t prusaConnectInterval = PRUSA_CONNECT_INTERVAL;
 
 void funcCamTicker( void ) {
   tickerCamFired = true;
@@ -172,10 +177,38 @@ esp_err_t loadConfigFromSD( void ) {
     else
       timeLapse = false;
   }
+  configParam = String( cameraConfig["prusa_connect"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    if( configParam == "on" )
+      prusaConnectActive = true;
+    else
+      prusaConnectActive = false;
+  }
+  configParam = String( cameraConfig["prusaToken"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+//    prusaToken = configParam;   // String -> const *char
+  }
+  configParam = String( cameraConfig["camFingerPrint"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+//    camFingerPrint = configParam;
+  }
   configParam = String( cameraConfig["camera_name"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
     cameraNameSuffix = configParam;
+  }
+  configParam = String( cameraConfig["wifi_ssid"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    // ssid = configParam;  // needs static space
+  }
+  configParam = String( cameraConfig["wifi_password"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    // password = configParam;  // needs static space
   }
 
   return ESP_OK;
@@ -404,8 +437,17 @@ void loop() {
     fnElapsedStr( elapsedTimeString );
     log_d( "PrusaConnect tick - %s", elapsedTimeString );
 
-    String htmlResponse = photoSendPrusaConnect();
-    log_d( "PrusaConnect response - %s", htmlResponse.c_str() );
+    prusaHTMLResponse = photoSendPrusaConnect();
+    log_d( "PrusaConnect response - %s", prusaHTMLResponse.c_str() );
+    JsonDocument prusaHTMLJSONResponse;
+    DeserializationError jsonError = deserializeJson( prusaHTMLJSONResponse, prusaHTMLResponse );
+    if( jsonError ) {
+      log_e( "Failed to parse PrusaConnect HTML Response!" );
+    }
+    prusaResponseCode = String( prusaHTMLJSONResponse["status_code"] );
+    if( prusaResponseCode == "" ) {
+      prusaResponseCode = "Error (ToDo)";
+    }
 
     if( tickerPrusaMissed > 1 ) {
       log_e( "Missed %d tickers", tickerPrusaMissed - 1 );

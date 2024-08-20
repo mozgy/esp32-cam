@@ -239,6 +239,12 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
 #endif
   } else if( variable == "rotation" ) {
     imageRotation = valueNum;
+  } else if( variable == "prusaconnect" ) {
+#if defined(PRUSA_CONNECT)
+    prusaConnectActive = !prusaConnectActive;
+#else
+    prusaConnectActive = false;
+#endif
   } else {
     err = -1;
   }

@@ -1,6 +1,7 @@
 
 #include <stddef.h>
 #include <WiFiClientSecure.h>
+#include <ESP32Ping.h>
 
 #include "variables.h"
 #include "credentials.h"
@@ -9,7 +10,17 @@
 #define SEND_BLOCK_SIZE 1024
 extern String photoFrameLength;
 
+bool prusaPrinterOnline;
+
 String photoSendPrusaConnect( void ) {
+
+  prusaPrinterOnline = true;
+  bool itsalive = Ping.ping( PRUSA_PRINTER_IP, 2 );
+  if( !itsalive ) {
+    log_e( "Printer OFFline ?" );
+    prusaPrinterOnline = false;
+    return "Printer OFFline!";
+  }
 
   WiFiClientSecure prusa;
 
@@ -51,21 +62,14 @@ String photoSendPrusaConnect( void ) {
   prusa.flush();
 
   String response = "";
-  String fullResponse = "";
   while( prusa.connected() ) {
     if( prusa.available() ) {
       response = prusa.readStringUntil( '\n' );
       log_v( "%s", response.c_str() );
-      // fullResponse += response;
-      if( response[0] == '{' ) {
-        fullResponse = response;  // line with - Content-Type: application/json
-      }
     }
   }
   prusa.stop();
 
-  // log_v( "%s", fullResponse.c_str() ); // bugged output - no proper CRLF
-
-  return fullResponse;
+  return response;
 
 }
