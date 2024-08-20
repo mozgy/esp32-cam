@@ -19,7 +19,8 @@ void bmeSerialPrint( void ) {
   if( bme280Found ) {
 #ifdef HAVE_BME280
     // \xB0 is °
-    log_i( "Temperature = %0.2f°C, Pressure = %4.2f hPA, Humidity = %.2f%%, Altitude = %.2f", bme.readTemperature(), (bme.readPressure() / 100.0F), bme.readHumidity(), bme.readAltitude( SEALEVELPRESSURE_HPA ) );
+    log_i( "Temperature = %0.2f°C, Pressure = %4.2f hPA, Humidity = %.2f%%, Altitude = %.2f", \
+           bme.readTemperature(), (bme.readPressure() / 100.0F), bme.readHumidity(), bme.readAltitude( SEALEVELPRESSURE_HPA ) );
 #endif
     log_i( "%s", elapsedTimeString );
   }
