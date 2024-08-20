@@ -28,7 +28,7 @@ Insert ESP32-CAM into helper board and connect it to PC.
 Gremlins ate this part - rewrite needed ..
 
 ## Using Camera
-Connect to the DHCP assigned IP and enjoy!
+Connect to the DHCP assigned IP and try several sublinks from next chapter!
 
 ### Notable Weblinks
 Web server listening port is 8080, changed from default 80 for easier router port-mapping, configurable at start of <a href=src/asyncWebServer.cpp>Web Server code</a>
@@ -56,7 +56,7 @@ Web server listening port is 8080, changed from default 80 for easier router por
     - set `#undef HAVE_CAMERA` if you don't want to use camera (OV sensor misbehaving or similar)
     - set `ESP_CAM_HOSTNAME` for your cam board name
     - set `CAM_SERIAL` if you have several camera boards
-    - set `FLASH_ENABLED true` if you want to use flash LED, currently working only on AI-Thinkers
+    - set `FLASH_ENABLED true` if you want to use flash LED
     - set `#undef HAVE_SDCARD` if you don't want to use microSD
     - set `TIME_LAPSE_MODE true` for camera board to start saving interval photos to microSD
 - Prusa Connect Setup<br>
