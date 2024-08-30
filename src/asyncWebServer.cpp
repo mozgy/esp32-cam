@@ -23,7 +23,7 @@ extern bool timeLapse;
 
 bool checkWebAuth( AsyncWebServerRequest *request ) {
 
-  if( !request->authenticate( http_username, http_password ) ) {
+  if( !request->authenticate( httpUsernameStr.c_str(), httpPasswordStr.c_str() ) ) {
     request->send( 200, "text/html", NOT_AUTHORIZED );
     log_d("auth-false");
     return false;
@@ -100,16 +100,16 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
   if( request->hasParam( "user" ) ) {
     AsyncWebParameter* arg = request->getParam( "user" );
     value = arg->value().c_str();
-    if( value != http_username ) {
+    if( value != httpUsernameStr ) {
     }
   }
   if( request->hasParam( "password" ) ) {
     AsyncWebParameter* arg = request->getParam( "password" );
     value = arg->value().c_str();
-    if( value != http_password ) {
+    if( value != httpPasswordStr ) {
     }
   }
-  if( !request->authenticate( http_username, http_password ) )
+  if( !request->authenticate( httpUsernameStr.c_str(), httpPasswordStr.c_str() ) )
     return request->requestAuthentication();  // Hm? Double-check this return ..
   request->send( 200, "text/html", LOGIN_SUCCESS );
 

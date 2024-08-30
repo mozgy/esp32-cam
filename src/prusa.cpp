@@ -10,6 +10,9 @@
 #define SEND_BLOCK_SIZE 1024
 extern String photoFrameLength;
 
+extern String prusaTokenStr;
+extern String camFingerPrintStr;
+
 bool prusaPrinterOnline;
 
 String photoSendPrusaConnect( void ) {
@@ -21,6 +24,9 @@ String photoSendPrusaConnect( void ) {
     prusaPrinterOnline = false;
     return "Printer OFFline!";
   }
+
+  prusaTokenStr = "" + String( prusa_token );
+  camFingerPrintStr = "" + String( camera_fingerprint );
 
   WiFiClientSecure prusa;
 
@@ -35,10 +41,10 @@ String photoSendPrusaConnect( void ) {
 
   // camFingerPrint += String( ESP.getEfuseMac() );
 
-  prusa.println( "fingerprint: " + String( camFingerPrint ) );
-  log_v( "fingerprint: %s", String( camFingerPrint ).c_str() );
-  prusa.println( "token: " + String( prusaToken ) );
-  log_v( "token: %s", String( prusaToken ).c_str() );
+  prusa.println( "fingerprint: " + camFingerPrintStr );
+  log_v( "fingerprint: %s", camFingerPrintStr.c_str() );
+  prusa.println( "token: " + prusaTokenStr );
+  log_v( "token: %s", prusaTokenStr.c_str() );
   prusa.println( "Content-Type: image/jpeg" );
   uint32_t photoFrameLength = photoFrame.length();
   prusa.println( "Content-Length: " + String( photoFrameLength ) );

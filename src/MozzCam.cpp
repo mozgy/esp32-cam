@@ -16,6 +16,11 @@
 #include "mywebserver.h"
 #include "mywifi.h"
 
+String httpUsernameStr;
+String httpPasswordStr;
+String wifiSSIDStr;
+String wifiPasswordStr;
+
 long timeZone = 1;
 byte daySaveTime = 1;
 struct tm startTime;
@@ -38,6 +43,8 @@ bool bme280Found;
 bool prusaConnectActive = false;
 String prusaHTMLResponse;
 String prusaResponseCode;
+String prusaTokenStr;
+String camFingerPrintStr;
 
 Ticker tickerCam, tickerBME, tickerPrusa;
 boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
@@ -158,9 +165,15 @@ esp_err_t loadConfigFromSD( void ) {
     return ESP_FAIL;
   }
 
-  // json {"http_username":"x","http_password":"y","wifi_ssid":"x","wifi_password":"y" \
-  //       ,"camera_name":"1","flash":"off","timelapse":"off","prusa_connect":"off"}
+  // json {"http_username":"x","http_password":"y","wifi_ssid":"x","wifi_password":"y", \
+  //       "camera_name":"cam_1","flash":"off","timelapse":"off", \
+  //       "prusa_connect":"off","prusa_token":"xx","camera_fingerprint":"uuigen"}
 
+  configParam = String( cameraConfig["camera_name"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    cameraNameSuffix = configParam;
+  }
   configParam = String( cameraConfig["flash"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
@@ -185,30 +198,35 @@ esp_err_t loadConfigFromSD( void ) {
     else
       prusaConnectActive = false;
   }
-  configParam = String( cameraConfig["prusaToken"] );
+  configParam = String( cameraConfig["prusa_token"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
-//    prusaToken = configParam;   // String -> const *char
+    prusaTokenStr = configParam;
   }
-  configParam = String( cameraConfig["camFingerPrint"] );
+  configParam = String( cameraConfig["camera_fingerprint"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
-//    camFingerPrint = configParam;
-  }
-  configParam = String( cameraConfig["camera_name"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    cameraNameSuffix = configParam;
+    camFingerPrintStr = configParam;
   }
   configParam = String( cameraConfig["wifi_ssid"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
-    // ssid = configParam;  // needs static space
+    wifiSSIDStr = configParam;
   }
   configParam = String( cameraConfig["wifi_password"] );
   if( configParam != "" ) {
     log_i( "Config %s", configParam );
-    // password = configParam;  // needs static space
+    wifiPasswordStr = configParam;
+  }
+  configParam = String( cameraConfig["http_username"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    httpUsernameStr = configParam;
+  }
+  configParam = String( cameraConfig["http_password"] );
+  if( configParam != "" ) {
+    log_i( "Config %s", configParam );
+    httpPasswordStr = configParam;
   }
 
   return ESP_OK;
@@ -329,15 +347,6 @@ void setup() {
   neopixelWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
 #endif
 
-  log_d( "Before initWiFi!" );
-  initWiFi();
-  log_d( "Before NTP!" );
-  getNTPTime();
-
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, 0, 0 );
-#endif
-
 #ifdef HAVE_CAMERA
   log_d( "Before initCam!" );
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
@@ -347,12 +356,25 @@ void setup() {
   flashEnabled = false;
 #endif
 
+  log_d( "Before initWiFi!" );
+  wifiSSIDStr = "" + String( wifi_ssid );;
+  wifiPasswordStr = "" + String( wifi_password );;
+  initWiFi();
+  log_d( "Before NTP!" );
+  getNTPTime();
+
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  neopixelWrite( FLASH_LED, 0, 0, 0 );
+#endif
+
 #ifdef HAVE_BME280
   log_d( "Before initBME!" );
   initBME();  // *HAS* to be *after* initSDCard() if board has SDCard ! Hmm, maybe not before
 #endif
 
   log_d( "Before initAsyncWebServer!" );
+  httpUsernameStr = "" + String( http_username );
+  httpPasswordStr = "" + String( http_password );
   initAsyncWebServer();
   log_d( "Before initOTA!" );
   initOTA();

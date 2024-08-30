@@ -28,6 +28,7 @@ esp_err_t loadFromSDCard( AsyncWebServerRequest* );
 void initAsyncWebServer( void );
 void doSnapSavePhoto( void );
 extern String photoSendPrusaConnect( void );
+extern bool prusaPrinterOnline;
 
 String getHTMLRootText( void );
 String getHTMLStatisticsText( void );
@@ -36,12 +37,15 @@ String getHTMLFullSetupText( void );
 String getMetricsText( void );
 String getCameraStatus( void );
 
-void fnElapsedStr( char* );
-void initSDCard( void );
+extern void fnElapsedStr( char* );
+extern void initSDCard( void );
 extern bool SDCardOK;
 extern int tickerCounter;
 
 extern void reconfigureCamera( void );
 extern void fnSetFrameSize( String );
+
+extern String httpUsernameStr;
+extern String httpPasswordStr;
 
 #endif

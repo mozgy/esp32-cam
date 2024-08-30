@@ -46,7 +46,7 @@ void WiFiStationDisconnected( WiFiEvent_t event, WiFiEventInfo_t info ) {
   log_i( "Reconnecting .." );
   // WiFi.disconnect( );
   // vTaskDelay( 4000 );
-  WiFi.begin( wifi_ssid, wifi_password );
+  WiFi.begin( wifiSSIDStr, wifiPasswordStr );
 
 }
 
@@ -124,7 +124,7 @@ void initWiFi( void ) {
   WiFi.onEvent( WiFiGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP );
   WiFi.onEvent( WiFiStationDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED );
   WiFi.setHostname( ESP_CAM_HOSTNAME );
-  WiFi.begin( wifi_ssid, wifi_password );
+  WiFi.begin( wifiSSIDStr, wifiPasswordStr );
   WiFi.setSleep( false );
 
   WiFi.scanNetworks( true );

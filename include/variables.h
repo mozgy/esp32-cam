@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.33.4"
+#define SW_VERSION "0.33.5"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
-#define CAM_SERIAL "1"
+#define CAM_SERIAL "2"
 
 #define FLASH_ENABLED false
 
@@ -19,7 +19,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 #undef PRUSA_CONNECT
-#define PRUSA_CONNECT_INTERVAL 75
+#define PRUSA_CONNECT_INTERVAL 72
 #define PRUSA_PRINTER_IP "192.168.1.72"   // your printer IP address
 
 extern String cameraNameSuffix;

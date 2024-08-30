@@ -25,4 +25,7 @@ void WiFiStationDisconnected( WiFiEvent_t, WiFiEventInfo_t );
 void initWiFi( void );
 void initOTA( void );
 
+extern String wifiSSIDStr;
+extern String wifiPasswordStr;
+
 #endif
