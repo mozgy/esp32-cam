@@ -7,7 +7,7 @@ static const char* wifi_password = "****";
 static const char* http_username = "admin";
 static const char* http_password = "admin";
 
-static const char* prusaToken = "get from connect.prusa3d.com";
-static const char* camFingerPrint = "run uuidgen";
+static const char* prusa_token = "get from connect.prusa3d.com";
+static const char* camera_fingerprint = "run uuidgen";
 
 #endif
