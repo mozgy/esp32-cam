@@ -49,8 +49,8 @@ String camFingerPrintStr;
 Ticker tickerCam, tickerBME, tickerPrusa;
 boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
 u_int32_t tickerCamCounter, tickerCamMissed;
-int intervalTimeLapse = 60;
-int oldTickerValue;
+u_int16_t timeLapseInterval = 60;
+u_int16_t oldTickerValue;
 u_int32_t tickerBMECounter, tickerBMEMissed;
 u_int32_t tickerPrusaCounter, tickerPrusaMissed;
 u_int16_t prusaConnectInterval = PRUSA_CONNECT_INTERVAL;
@@ -354,9 +354,9 @@ void setup() {
 
   tickerCamCounter = 0;
   tickerCamMissed = 0;
-  tickerCam.attach( intervalTimeLapse, funcCamTicker );
+  tickerCam.attach( timeLapseInterval, funcCamTicker );
   tickerCamFired = true;
-  oldTickerValue = intervalTimeLapse;
+  oldTickerValue = timeLapseInterval;
 
 #ifdef PRUSA_CONNECT
   tickerPrusaCounter = 0;
@@ -385,17 +385,13 @@ void loop() {
     doSnapSavePhoto();
 #endif
     int wifiStatus = WiFi.status();
-    log_d( "%s", get_wifi_status( wifiStatus ) );
-    log_i( "(RSSI): %d dBm, MAC=%s", WiFi.RSSI(), WiFi.macAddress().c_str() );
-    if( WiFi.status() == WL_CONNECTED ) {
-      log_i( "IP=%s", WiFi.localIP().toString().c_str() );   // TODO - add to previous log line
-    }
+    log_i( "%s, (RSSI): %d dBm, MAC=%s, IP=%s", get_wifi_status( wifiStatus ), WiFi.RSSI(), WiFi.macAddress().c_str(), ( WiFi.status() == WL_CONNECTED ) ? WiFi.localIP().toString().c_str() : "" );
     fnElapsedStr( elapsedTimeString );
     log_d( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
-    if( oldTickerValue != intervalTimeLapse ) {
+    if( oldTickerValue != timeLapseInterval ) {
       tickerCam.detach( );
-      tickerCam.attach( intervalTimeLapse, funcCamTicker );
-      oldTickerValue = intervalTimeLapse;
+      tickerCam.attach( timeLapseInterval, funcCamTicker );
+      oldTickerValue = timeLapseInterval;
     }
     if( tickerCamMissed > 1 ) {
       log_e( "Missed %d tickers", tickerCamMissed - 1 );

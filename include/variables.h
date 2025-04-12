@@ -26,7 +26,7 @@ extern String cameraNameSuffix;
 
 extern String photoFrame;
 extern bool timeLapse;
-extern int intervalTimeLapse;
+extern u_int16_t timeLapseInterval;
 
 extern bool prusaConnectActive;
 extern u_int16_t prusaConnectInterval;
