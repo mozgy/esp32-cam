@@ -22,8 +22,10 @@ String photoSendPrusaConnect( void ) {
   if( !itsalive ) {
     log_e( "Printer OFFline ?" );
     prusaPrinterOnline = false;
+    prusaConnectActive = false;
     return "Printer OFFline!";
   }
+  prusaConnectActive = true;
 
   prusaTokenStr = "" + String( prusa_token );
   camFingerPrintStr = "" + String( camera_fingerprint );
