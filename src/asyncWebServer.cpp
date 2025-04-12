@@ -98,13 +98,13 @@ void asyncHandleLogin( AsyncWebServerRequest *request ) {
 
   String value = "";
   if( request->hasParam( "user" ) ) {
-    AsyncWebParameter* arg = request->getParam( "user" );
+    const AsyncWebParameter* arg = request->getParam( "user" );
     value = arg->value().c_str();
     if( value != httpUsernameStr ) {
     }
   }
   if( request->hasParam( "password" ) ) {
-    AsyncWebParameter* arg = request->getParam( "password" );
+    const AsyncWebParameter* arg = request->getParam( "password" );
     value = arg->value().c_str();
     if( value != httpPasswordStr ) {
     }
@@ -121,12 +121,12 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
   // http://{CAM_IP}/capture?_cb=1701038417082
   String value = "";
   if( request->hasParam( "_cb" ) ) {
-    AsyncWebParameter* arg = request->getParam( "_cb" );
+    const AsyncWebParameter* arg = request->getParam( "_cb" );
     value = arg->value().c_str();
   }
   if( !timeLapse )  // if on timelapse mode just take last photo taken
     doSnapSavePhoto();
-  AsyncWebServerResponse *response = request->beginResponse( 200, "image/jpeg", photoFrame );
+  AsyncWebServerResponse *response = request->beginResponse( 200, "image/jpeg", (const u_int8_t *)photoFrame.c_str(), photoFrameLength );
   response->addHeader( "Content-Disposition", "inline; filename=photo.jpg" );
   response->addHeader( "Access-Control-Allow-Origin", "*" );
   response->addHeader( "X-Timestamp", value );
@@ -159,7 +159,7 @@ void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 void asyncHandleStream( AsyncWebServerRequest *request ) {
 
   if( !checkWebAuth( request ) ) {
-    request->send( LittleFS.open( "/NotAuth.jpg" ), "/NotAuth.jpg", "image/jpg" );
+    request->send( LittleFS, "/NotAuth.jpg", "image/jpg" );
     return;
   }
 
@@ -171,7 +171,7 @@ void asyncHandleStream( AsyncWebServerRequest *request ) {
 
   if ( timeLapse ) {
     // request->send( 200, "text/html", TIME_LAPSE_ACTIVE );
-    request->send( LittleFS.open( "/TLActive.jpg" ), "/TLActive.jpg", "image/jpg" );
+    request->send( LittleFS, "/TLActive.jpg", "image/jpg" );
     return;
   }
   AsyncJpegStreamResponse *response = new AsyncJpegStreamResponse();
@@ -188,10 +188,10 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
   String value = "";
 
   if( request->hasParam( "var" ) ) {
-    AsyncWebParameter* arg = request->getParam( "var" );
+    const AsyncWebParameter* arg = request->getParam( "var" );
     variable = arg->value().c_str();
     if( request->hasParam( "val" ) ) {
-      AsyncWebParameter* arg = request->getParam( "val" );
+      const AsyncWebParameter* arg = request->getParam( "val" );
       value = arg->value();
     }
   } else {
@@ -341,7 +341,7 @@ void asyncHandleDelete( AsyncWebServerRequest *request ) {
 
   String webText;
 
-  AsyncWebParameter* argDelete = request->getParam( "filename" );
+  const AsyncWebParameter* argDelete = request->getParam( "filename" );
   String fileName = argDelete->value();
 
   log_d( " asyncHandleDelete - %s\n", fileName );
@@ -379,7 +379,7 @@ void asyncHandleNotFound( AsyncWebServerRequest *request ) {
   webText += request->params();
   webText += "\n";
   for( uint8_t i = 0 ; i < request->params(); i++ ) {
-    AsyncWebParameter* p = request->getParam( i );
+    const AsyncWebParameter* p = request->getParam( i );
     webText += String( p->name().c_str() ) + " : " + String( p->value().c_str() ) + "\r\n";
   }
 
