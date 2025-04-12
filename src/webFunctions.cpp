@@ -37,7 +37,9 @@ String getHTMLStatisticsText( void ) {
     webText += String( tmpStr );
   }
 #endif
-  webText += "<br>Time Lapse Period " + String( intervalTimeLapse ) + "sec";
+  if ( TIME_LAPSE_MODE ) {
+    webText += "<br>Time Lapse Period " + String( intervalTimeLapse ) + "sec";
+  }
 #ifdef PRUSA_CONNECT
   webText += "<br>Prusa Connect ";
   if( prusaConnectActive ) {
