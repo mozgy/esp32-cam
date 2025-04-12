@@ -299,7 +299,7 @@ void doSnapSavePhoto( void ) {
 
     getLocalTime( &tmstruct, 5000 );
 
-    photoFileDir = String( "/mozz-cam/" );  // /mozz-cam/
+    photoFileDir = String( "/mozz-cam/" );
     if( !SD_MMC.mkdir( photoFileDir ) ) {
       // log_e( "MKDIR Failed!" ); // dir could exist
     }
@@ -434,7 +434,6 @@ void doSnapSavePhoto( void ) {
 
   int64_t capture_end = esp_timer_get_time();
   log_d( "Capture Time: %uB %ums", (uint32_t)( photoFrameLength ), (uint32_t)( ( capture_end - capture_start )/1000 ) );
-//  log_d( "Total space: %lluMB", SD_MMC.totalBytes() / (1024 * 1024) );
-//  log_d( "Used space: %lluMB", SD_MMC.usedBytes() / (1024 * 1024) );
+//  log_d( "Total space: %lluMB, Used space: %lluMB", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
 
 }
