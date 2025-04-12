@@ -142,6 +142,28 @@ void getNTPTime( void ) {
 
 }
 
+String getConfigValue( JsonDocument jsonConfig, String configName ) {
+
+  String configValue = String( jsonConfig[ configName ] );
+  if( configValue != "" ) {
+    log_i( "Config %s=%s", configName, configValue );
+  }
+  return configValue;
+
+}
+
+bool getConfigBoolValue( JsonDocument jsonConfig, String configName ) {
+
+  String configValue = String( jsonConfig[ configName ] );
+  if( configValue != "" ) {
+    log_i( "Config %s=%s", configName, configValue );
+    if( configValue == "on" || configValue == "yes" )
+      return true;
+  }
+  return false;
+
+}
+
 esp_err_t loadConfigFromSD( void ) {
 
   File configFP;
@@ -169,65 +191,16 @@ esp_err_t loadConfigFromSD( void ) {
   //       "camera_name":"cam_1","flash":"off","timelapse":"off", \
   //       "prusa_connect":"off","prusa_token":"xx","camera_fingerprint":"uuigen"}
 
-  configParam = String( cameraConfig["camera_name"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    cameraNameSuffix = configParam;
-  }
-  configParam = String( cameraConfig["flash"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    if( configParam == "on" )
-      flashEnabled = true;
-    else
-      flashEnabled = false;
-  }
-  configParam = String( cameraConfig["timelapse"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    if( configParam == "on" )
-      timeLapse = true;
-    else
-      timeLapse = false;
-  }
-  configParam = String( cameraConfig["prusa_connect"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    if( configParam == "on" )
-      prusaConnectActive = true;
-    else
-      prusaConnectActive = false;
-  }
-  configParam = String( cameraConfig["prusa_token"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    prusaTokenStr = configParam;
-  }
-  configParam = String( cameraConfig["camera_fingerprint"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    camFingerPrintStr = configParam;
-  }
-  configParam = String( cameraConfig["wifi_ssid"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    wifiSSIDStr = configParam;
-  }
-  configParam = String( cameraConfig["wifi_password"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    wifiPasswordStr = configParam;
-  }
-  configParam = String( cameraConfig["http_username"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    httpUsernameStr = configParam;
-  }
-  configParam = String( cameraConfig["http_password"] );
-  if( configParam != "" ) {
-    log_i( "Config %s", configParam );
-    httpPasswordStr = configParam;
-  }
+  cameraNameSuffix = getConfigValue( cameraConfig, "camera_name" );
+  flashEnabled = getConfigBoolValue( cameraConfig, "flash" );
+  timeLapse = getConfigBoolValue( cameraConfig, "timelapse" );
+  prusaConnectActive = getConfigBoolValue( cameraConfig, "prusa_connect" );
+  prusaTokenStr = getConfigValue( cameraConfig, "prusa_token" );
+  camFingerPrintStr = getConfigValue( cameraConfig, "camera_fingerprint" );
+  wifiSSIDStr = getConfigValue( cameraConfig, "wifi_ssid" );
+  wifiPasswordStr = getConfigValue( cameraConfig, "wifi_password" );
+  httpUsernameStr = getConfigValue( cameraConfig, "http_username" );
+  httpPasswordStr = getConfigValue( cameraConfig, "http_password" );
 
   return ESP_OK;
 
