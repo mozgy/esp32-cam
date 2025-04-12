@@ -13,6 +13,8 @@ extern uint8_t imageRotation;
 
 #define FLASH_LED LED_GPIO_NUM
 // #define AI_THINKER_LED 33    // onboard red one
+// #define LED_GPIO_NUM  4  // CAMERA_MODEL_AI_THINKER
+// #define LED_GPIO_NUM 48  // CAMERA_MODEL_ESP32S3_CAM
 // #define FLASH_ENABLE_HW true // not yet used
 
 #include "variables.h"
