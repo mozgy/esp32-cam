@@ -423,6 +423,7 @@ void initAsyncWebServer( void ) {
   asyncWebServer.on( "/login", HTTP_POST, asyncHandleLogin );
   asyncWebServer.on( "/setup", HTTP_GET, asyncHandleFullSetup );
   asyncWebServer.on( "/stats", HTTP_GET, asyncHandleStatistics );
+  asyncWebServer.on( "/info", HTTP_GET, asyncHandleStatistics );
 
   asyncWebServer.on( "/fullsetup", HTTP_GET, asyncHandleFullSetup );
   asyncWebServer.on( "/status", HTTP_GET, asyncHandleStatus );
