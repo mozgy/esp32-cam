@@ -194,13 +194,15 @@ esp_err_t loadConfigFromSD( void ) {
   cameraNameSuffix = getConfigValue( cameraConfig, "camera_name" );
   flashEnabled = getConfigBoolValue( cameraConfig, "flash" );
   timeLapse = getConfigBoolValue( cameraConfig, "timelapse" );
-  prusaConnectActive = getConfigBoolValue( cameraConfig, "prusa_connect" );
-  prusaTokenStr = getConfigValue( cameraConfig, "prusa_token" );
-  camFingerPrintStr = getConfigValue( cameraConfig, "camera_fingerprint" );
   wifiSSIDStr = getConfigValue( cameraConfig, "wifi_ssid" );
   wifiPasswordStr = getConfigValue( cameraConfig, "wifi_password" );
   httpUsernameStr = getConfigValue( cameraConfig, "http_username" );
   httpPasswordStr = getConfigValue( cameraConfig, "http_password" );
+  prusaConnectActive = getConfigBoolValue( cameraConfig, "prusa_connect" );
+  if( prusaConnectActive ) {
+    prusaTokenStr = getConfigValue( cameraConfig, "prusa_token" );
+    camFingerPrintStr = getConfigValue( cameraConfig, "camera_fingerprint" );
+  }
 
   return ESP_OK;
 
