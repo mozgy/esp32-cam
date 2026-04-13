@@ -133,6 +133,9 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
 /* this has to be inside capture {} or _not_
   char ts[32];
   snprintf(ts, 32, "%lld.%06ld", fb->timestamp.tv_sec, fb->timestamp.tv_usec);
+  sprintf( currentDateTime, "%s%02d", currentDateTime, photoSnapTime.tm_hour );
+  sprintf( currentDateTime, "%s%02d", currentDateTime, photoSnapTime.tm_min );
+  sprintf( currentDateTime, "%s%02d\0", currentDateTime, photoSnapTime.tm_sec );
   response->addHeader( "X-Timestamp", (const char *)ts );
   */
   request->send( response );

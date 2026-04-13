@@ -32,6 +32,7 @@ String cameraNameSuffix = CAM_SERIAL;
 
 String photoFrame;
 size_t photoFrameLength;
+struct tm photoSnapTime;
 uint8_t imageRotation = 1; /* 1 - 0, 3 - 180, 6 - 90, 8 - 270 */
 
 bool flashEnabled = FLASH_ENABLED;

@@ -289,43 +289,42 @@ void doSnapSavePhoto( void ) {
   String photoFileDir;
   String photoFileName;
   camera_fb_t * photoFrameBuffer = NULL;
-  struct tm tmstruct;
-  tmstruct.tm_year = 0;
+  photoSnapTime.tm_year = 0;
   photoFrame = "";
+
+  getLocalTime( &photoSnapTime, 5000 );
 
   if( timeLapse && SDCardOK ) {
     String photoFileDir;
     String photoFileName;
 
-    getLocalTime( &tmstruct, 5000 );
-
     photoFileDir = String( "/mozz-cam/" );
     if( !SD_MMC.mkdir( photoFileDir ) ) {
       // log_e( "MKDIR Failed!" ); // dir could exist
     }
-    sprintf( currentDateTime, "%04d\0", (tmstruct.tm_year)+1900 );
+    sprintf( currentDateTime, "%04d\0", (photoSnapTime.tm_year)+1900 );
     photoFileDir += String( currentDateTime );  // /mozz-cam/YYYY
     if( !SD_MMC.mkdir( photoFileDir ) ) {
       // log_e( "MKDIR Failed!" ); // dir could exist
     }
-    sprintf( currentDateTime, "/%02d%02d\0", (tmstruct.tm_mon)+1, tmstruct.tm_mday );
+    sprintf( currentDateTime, "/%02d%02d\0", (photoSnapTime.tm_mon)+1, photoSnapTime.tm_mday );
     photoFileDir += String( currentDateTime );  // /mozz-cam/YYYY/MMDD
     if( !SD_MMC.mkdir( photoFileDir ) ) {
       // log_e( "MKDIR Failed!" ); // dir could exist
     }
-    sprintf( currentDateTime, "/%02d\0", tmstruct.tm_hour );
+    sprintf( currentDateTime, "/%02d\0", photoSnapTime.tm_hour );
     photoFileDir += String( currentDateTime );
     if( !SD_MMC.mkdir( photoFileDir ) ) {
       // log_e( "MKDIR Failed!" ); // dir could exist
     }
 
     // yes, I know it can be oneliner -
-    sprintf( currentDateTime, "%04d", (tmstruct.tm_year)+1900 );
-    sprintf( currentDateTime, "%s%02d", currentDateTime, (tmstruct.tm_mon)+1 );
-    sprintf( currentDateTime, "%s%02d", currentDateTime, tmstruct.tm_mday );
-    sprintf( currentDateTime, "%s%02d", currentDateTime, tmstruct.tm_hour );
-    sprintf( currentDateTime, "%s%02d", currentDateTime, tmstruct.tm_min );
-    sprintf( currentDateTime, "%s%02d\0", currentDateTime, tmstruct.tm_sec );
+    sprintf( currentDateTime, "%04d", (photoSnapTime.tm_year)+1900 );
+    sprintf( currentDateTime, "%s%02d", currentDateTime, (photoSnapTime.tm_mon)+1 );
+    sprintf( currentDateTime, "%s%02d", currentDateTime, photoSnapTime.tm_mday );
+    sprintf( currentDateTime, "%s%02d", currentDateTime, photoSnapTime.tm_hour );
+    sprintf( currentDateTime, "%s%02d", currentDateTime, photoSnapTime.tm_min );
+    sprintf( currentDateTime, "%s%02d\0", currentDateTime, photoSnapTime.tm_sec );
     photoFileName = photoFileDir + String( "/photo-" ) + currentDateTime + String( ".jpg" ) ;
     log_d( "%s", photoFileName.c_str() );
 
