@@ -152,7 +152,7 @@ void asyncHandlePrusaConnect( AsyncWebServerRequest *request ) {
 void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleWebSockets " );
-  request->send( 200, "text/html", "Here Be WebSockets .." );
+  request->send( 200, "text/plain", "Here Be WebSockets .." );
 
 }
 
