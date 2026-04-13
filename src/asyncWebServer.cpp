@@ -166,7 +166,7 @@ void asyncHandleStream( AsyncWebServerRequest *request ) {
   log_d( " asyncHandleStream " );
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 12, 0, 0 ); // turn ON faint RED :)
+  rgbLedWrite( FLASH_LED, 12, 0, 0 ); // turn ON faint RED :)
 #endif
 
   if ( timeLapse ) {

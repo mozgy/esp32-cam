@@ -295,7 +295,7 @@ void setup() {
   // esp_wifi_internal_set_log_mod(WIFI_LOG_MODULE_ALL, WIFI_LOG_SUBMODULE_ALL, true);
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-//  neopixelWrite( FLASH_LED, (RGB_BRIGHTNESS >> 1), 0, 0 );
+//  rgbledWrite( FLASH_LED, (RGB_BRIGHTNESS >> 1), 0, 0 );
 #endif
 
   prnEspStats();
@@ -308,7 +308,7 @@ void setup() {
   }
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
+  rgbLedWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
 #endif
 
 #ifdef HAVE_SDCARD
@@ -319,7 +319,7 @@ void setup() {
 #endif
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
+  rgbLedWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
 #endif
 
 #ifdef HAVE_CAMERA
@@ -339,7 +339,7 @@ void setup() {
   getNTPTime();
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, 0, 0 );
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 #ifdef HAVE_BME280

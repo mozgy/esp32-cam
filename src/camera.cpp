@@ -188,7 +188,7 @@ void flashON( void ) {
   digitalWrite( FLASH_LED, HIGH );
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
 #endif
   log_d( "Flash is ON, smile!" );
 
@@ -204,7 +204,7 @@ void flashON( bool forcedFlash ) {
   digitalWrite( FLASH_LED, HIGH );
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
 #endif
 
 }
@@ -212,7 +212,7 @@ void flashON( bool forcedFlash ) {
 void flashON( uint8_t R, uint8_t G, uint8_t B ) {
 
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, R, G, B );
+  rgbLedWrite( FLASH_LED, R, G, B );
 #endif
 
 }
@@ -232,7 +232,7 @@ void flashOFF( void ) {
   digitalWrite( FLASH_LED, LOW );
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, 0, 0 );
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 // DATA1 / Flash LED - PIN4
@@ -254,7 +254,7 @@ void flashOFF( bool forcedFlash ) {
   digitalWrite( FLASH_LED, LOW );
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  neopixelWrite( FLASH_LED, 0, 0, 0 );
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 }
