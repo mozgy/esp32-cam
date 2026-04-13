@@ -41,8 +41,6 @@ String photoSendPrusaConnect( void ) {
   prusa.println( "User-Agent: ESP32-CAM Family" );
   prusa.println( "Connection: close" );
 
-  // camFingerPrint += String( ESP.getEfuseMac() );
-
   prusa.println( "fingerprint: " + camFingerPrintStr );
   log_v( "fingerprint: %s", camFingerPrintStr.c_str() );
   prusa.println( "token: " + prusaTokenStr );
