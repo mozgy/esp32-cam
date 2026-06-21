@@ -1,8 +1,6 @@
 #ifndef _MYWEBSERVER_H_
 #define _MYWEBSERVER_H_
 
-#include <WebServer.h>
-#include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
 static const char *NOT_AUTHORIZED = "<!doctype html><html><head><meta http-equiv='refresh' content='20; URL=/'><title>Cam</title><link rel='stylesheet' type='text/css' href='mozz.css'></head><body>Not Authorized!</body></html>";
