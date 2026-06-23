@@ -376,7 +376,7 @@ void asyncHandleNotFound( AsyncWebServerRequest *request ) {
   webText = "URI: ";
   webText += request->url();
   webText += " - Method: ";
-  webText += ( request->method() == AsyncWebRequestMethod::HTTP_GET ) ? "GET" : "POST";
+  webText += ( request->method() == HTTP_GET ) ? "GET" : "POST";
   webText += ", Parameters: ";
   webText += request->params();
   webText += "\n";
@@ -421,31 +421,31 @@ void asyncHandleNotFound( AsyncWebServerRequest *request ) {
 
 void initAsyncWebServer( void ) {
 
-  asyncWebServer.on( "/", AsyncWebRequestMethod::HTTP_GET, asyncHandleRoot );
-  asyncWebServer.on( "/login", AsyncWebRequestMethod::HTTP_POST, asyncHandleLogin );
-  asyncWebServer.on( "/setup", AsyncWebRequestMethod::HTTP_GET, asyncHandleFullSetup );
-  asyncWebServer.on( "/stats", AsyncWebRequestMethod::HTTP_GET, asyncHandleStatistics );
-  asyncWebServer.on( "/info", AsyncWebRequestMethod::HTTP_GET, asyncHandleStatistics );
+  asyncWebServer.on( "/", HTTP_GET, asyncHandleRoot );
+  asyncWebServer.on( "/login", HTTP_GET, asyncHandleLogin ); // HTTP_POST
+  asyncWebServer.on( "/setup", HTTP_GET, asyncHandleFullSetup );
+  asyncWebServer.on( "/stats", HTTP_GET, asyncHandleStatistics );
+  asyncWebServer.on( "/info", HTTP_GET, asyncHandleStatistics );
 
-  asyncWebServer.on( "/fullsetup", AsyncWebRequestMethod::HTTP_GET, asyncHandleFullSetup );
-  asyncWebServer.on( "/status", AsyncWebRequestMethod::HTTP_GET, asyncHandleStatus );
-  asyncWebServer.on( "/config", AsyncWebRequestMethod::HTTP_GET, asyncHandleFileConfig );
+  asyncWebServer.on( "/fullsetup", HTTP_GET, asyncHandleFullSetup );
+  asyncWebServer.on( "/status", HTTP_GET, asyncHandleStatus );
+  asyncWebServer.on( "/config", HTTP_GET, asyncHandleFileConfig );
 
-  asyncWebServer.on( "/control", AsyncWebRequestMethod::HTTP_POST, asyncHandleCommand );
-  asyncWebServer.on( "/capture", AsyncWebRequestMethod::HTTP_GET, asyncHandleCapture );
-  asyncWebServer.on( "/stream", AsyncWebRequestMethod::HTTP_GET, asyncHandleStream );
-  asyncWebServer.on( "/ws", AsyncWebRequestMethod::HTTP_GET, asyncHandleWebSockets );  // TODO
+  asyncWebServer.on( "/control", HTTP_GET, asyncHandleCommand ); // HTTP_POST
+  asyncWebServer.on( "/capture", HTTP_GET, asyncHandleCapture );
+  asyncWebServer.on( "/stream", HTTP_GET, asyncHandleStream );
+  asyncWebServer.on( "/ws", HTTP_GET, asyncHandleWebSockets );  // TODO
 
-  asyncWebServer.on( "/delete", AsyncWebRequestMethod::HTTP_GET, asyncHandleDelete );  // TODO
-  asyncWebServer.on( "/archive", AsyncWebRequestMethod::HTTP_GET, asyncHandleArchive );
-  asyncWebServer.on( "/sdcard", AsyncWebRequestMethod::HTTP_GET, asyncHandleSDCardRemount );
+  asyncWebServer.on( "/delete", HTTP_GET, asyncHandleDelete );  // TODO
+  asyncWebServer.on( "/archive", HTTP_GET, asyncHandleArchive );
+  asyncWebServer.on( "/sdcard", HTTP_GET, asyncHandleSDCardRemount );
 
-  asyncWebServer.on( "/scan", AsyncWebRequestMethod::HTTP_GET, asyncHandleScan );
-  asyncWebServer.on( "/espReset", AsyncWebRequestMethod::HTTP_GET, asyncHandleESPReset );
+  asyncWebServer.on( "/scan", HTTP_GET, asyncHandleScan );
+  asyncWebServer.on( "/espReset", HTTP_GET, asyncHandleESPReset );
 
-  asyncWebServer.on( "/metrics", AsyncWebRequestMethod::HTTP_GET, asyncHandleMetrics );
+  asyncWebServer.on( "/metrics", HTTP_GET, asyncHandleMetrics );
 
-  asyncWebServer.on( "/prusa", AsyncWebRequestMethod::HTTP_POST, asyncHandlePrusaConnect );
+  asyncWebServer.on( "/prusa", HTTP_GET, asyncHandlePrusaConnect );  // HTTP_POST
 
   asyncWebServer.onNotFound( asyncHandleNotFound );
 
