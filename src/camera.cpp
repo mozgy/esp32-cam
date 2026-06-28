@@ -121,8 +121,10 @@ String getCameraStatus( void ) {
   jsonResponse += ",\"flashled\":";
   jsonResponse += ( flashEnabled ) ? "1" : "0";
   jsonResponse += ",\"rotation\":" + String( imageRotation );
+#ifdef PRUSA_CONNECT
   jsonResponse += ",\"prusaconnect\":";
   jsonResponse += ( prusaConnectActive ) ? "1" : "0";
+#endif
   jsonResponse += "}";
 
   log_d( "%s", jsonResponse.c_str() );

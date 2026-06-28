@@ -1,3 +1,4 @@
+#ifdef PRUSA_CONNECT
 
 #include <stddef.h>
 #include <WiFiClientSecure.h>
@@ -10,6 +11,7 @@
 #define SEND_BLOCK_SIZE 1024
 extern String photoFrameLength;
 
+extern String prusaIPv4;
 extern String prusaTokenStr;
 extern String camFingerPrintStr;
 
@@ -18,7 +20,7 @@ bool prusaPrinterOnline;
 String photoSendPrusaConnect( void ) {
 
   prusaPrinterOnline = true;
-  bool itsalive = Ping.ping( PRUSA_PRINTER_IP, 2 );
+  bool itsalive = Ping.ping( prusaIPv4.c_str(), 2 );
   if( !itsalive ) {
     log_e( "Printer OFFline ?" );
     prusaPrinterOnline = false;
@@ -79,3 +81,5 @@ String photoSendPrusaConnect( void ) {
   return response;
 
 }
+
+#endif

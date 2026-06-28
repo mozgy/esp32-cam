@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.34.3"
+#define SW_VERSION "0.34.4"
 
 #define HAVE_CAMERA
 #define ESP_CAM_HOSTNAME "mozz-cam"
@@ -19,8 +19,6 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 #undef PRUSA_CONNECT
-#define PRUSA_CONNECT_INTERVAL 72
-#define PRUSA_PRINTER_IP "192.168.1.72"   // your printer IP address
 
 extern String cameraNameSuffix;
 
@@ -28,16 +26,20 @@ extern String photoFrame;
 extern bool timeLapse;
 extern u_int16_t timeLapseInterval;
 
-extern bool prusaConnectActive;
-extern u_int16_t prusaConnectInterval;
-extern bool prusaPrinterOnline;
-extern String prusaHTMLResponse;
-
 extern long timeZone;
 extern byte daySaveTime;
 
 extern char elapsedTimeString[40];
 extern char currentDateTime[17];
+
+#ifdef PRUSA_CONNECT
+#define PRUSA_CONNECT_INTERVAL 27
+#define PRUSA_PRINTER_IP "192.168.1.72"   // your printer IP address
+extern bool prusaConnectActive;
+extern u_int16_t prusaConnectInterval;
+extern bool prusaPrinterOnline;
+extern String prusaHTMLResponse;
+#endif
 
 extern void bmeSerialPrint( void );
 extern void initBME( void );

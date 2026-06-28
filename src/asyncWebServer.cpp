@@ -141,6 +141,7 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
 
 }
 
+#ifdef PRUSA_CONNECT
 void asyncHandlePrusaConnect( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleConnectPrusa " );
@@ -150,6 +151,7 @@ void asyncHandlePrusaConnect( AsyncWebServerRequest *request ) {
   request->send( 200, "text/plain", response );
 
 }
+#endif
 
 void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
 
@@ -242,10 +244,8 @@ void asyncHandleCommand( AsyncWebServerRequest *request ) {
   } else if( variable == "rotation" ) {
     imageRotation = valueNum;
   } else if( variable == "prusaconnect" ) {
-#if defined(PRUSA_CONNECT)
+#ifdef PRUSA_CONNECT
     prusaConnectActive = !prusaConnectActive;
-#else
-    prusaConnectActive = false;
 #endif
   } else {
     err = -1;
@@ -445,7 +445,9 @@ void initAsyncWebServer( void ) {
 
   asyncWebServer.on( "/metrics", HTTP_GET, asyncHandleMetrics );
 
-  asyncWebServer.on( "/prusa", HTTP_GET, asyncHandlePrusaConnect );  // HTTP_POST
+#ifdef PRUSA_CONNECT
+  asyncWebServer.on( "/prusa", HTTP_GET, asyncHandlePrusaConnect ); // HTTP_POST?
+#endif
 
   asyncWebServer.onNotFound( asyncHandleNotFound );
 

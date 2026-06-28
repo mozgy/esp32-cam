@@ -41,20 +41,25 @@ bool SDCardOK;
 
 bool bme280Found;
 
+#ifdef PRUSA_CONNECT
 bool prusaConnectActive = false;
 String prusaHTMLResponse;
 String prusaResponseCode;
+String prusaIPv4 = PRUSA_PRINTER_IP;
 String prusaTokenStr;
 String camFingerPrintStr;
+Ticker tickerPrusa;
+boolean tickerPrusaFired;
+u_int32_t tickerPrusaCounter, tickerPrusaMissed;
+u_int16_t prusaConnectInterval = PRUSA_CONNECT_INTERVAL;
+#endif
 
-Ticker tickerCam, tickerBME, tickerPrusa;
-boolean tickerCamFired, tickerBMEFired, tickerPrusaFired;
+Ticker tickerCam, tickerBME;
+boolean tickerCamFired, tickerBMEFired;
 u_int32_t tickerCamCounter, tickerCamMissed;
 u_int16_t timeLapseInterval = 60;
 u_int16_t oldTickerValue;
 u_int32_t tickerBMECounter, tickerBMEMissed;
-u_int32_t tickerPrusaCounter, tickerPrusaMissed;
-u_int16_t prusaConnectInterval = PRUSA_CONNECT_INTERVAL;
 
 void funcCamTicker( void ) {
   tickerCamFired = true;
@@ -62,16 +67,18 @@ void funcCamTicker( void ) {
   tickerCamMissed++;
 }
 
-void funcBMETicker( void ) {
-  tickerBMEFired = true;
-  tickerBMECounter++;
-  tickerBMEMissed++;
-}
-
+#ifdef PRUSA_CONNECT
 void funcPrusaTicker( void ) {
   tickerPrusaFired = true;
   tickerPrusaCounter++;
   tickerPrusaMissed++;
+}
+#endif
+
+void funcBMETicker( void ) {
+  tickerBMEFired = true;
+  tickerBMECounter++;
+  tickerBMEMissed++;
 }
 
 void prnEspStats( void ) {
@@ -199,11 +206,14 @@ esp_err_t loadConfigFromSD( void ) {
   wifiPasswordStr = getConfigValue( cameraConfig, "wifi_password" );
   httpUsernameStr = getConfigValue( cameraConfig, "http_username" );
   httpPasswordStr = getConfigValue( cameraConfig, "http_password" );
+#ifdef PRUSA_CONNECT
   prusaConnectActive = getConfigBoolValue( cameraConfig, "prusa_connect" );
   if( prusaConnectActive ) {
+    prusaIPv4 = getConfigValue( cameraConfig, "prusa_ipv4" );
     prusaTokenStr = getConfigValue( cameraConfig, "prusa_token" );
     camFingerPrintStr = getConfigValue( cameraConfig, "camera_fingerprint" );
   }
+#endif
 
   return ESP_OK;
 
