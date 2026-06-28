@@ -132,49 +132,6 @@ String getCameraStatus( void ) {
 
 }
 
-/*
-    // Sensor function pointers
-    int  (*init_status)         (sensor_t *sensor);
-    int  (*reset)               (sensor_t *sensor); // Reset the configuration of the sensor, and return ESP_OK if reset is successful
-    int  (*set_pixformat)       (sensor_t *sensor, pixformat_t pixformat);
-    int  (*set_framesize)       (sensor_t *sensor, framesize_t framesize);
-    int  (*set_contrast)        (sensor_t *sensor, int level);
-    int  (*set_brightness)      (sensor_t *sensor, int level);
-    int  (*set_saturation)      (sensor_t *sensor, int level);
-    int  (*set_sharpness)       (sensor_t *sensor, int level);
-    int  (*set_denoise)         (sensor_t *sensor, int level);
-    int  (*set_gainceiling)     (sensor_t *sensor, gainceiling_t gainceiling);
-    int  (*set_quality)         (sensor_t *sensor, int quality);
-    int  (*set_colorbar)        (sensor_t *sensor, int enable);
-    int  (*set_whitebal)        (sensor_t *sensor, int enable);
-    int  (*set_gain_ctrl)       (sensor_t *sensor, int enable);
-    int  (*set_exposure_ctrl)   (sensor_t *sensor, int enable);
-    int  (*set_hmirror)         (sensor_t *sensor, int enable);
-    int  (*set_vflip)           (sensor_t *sensor, int enable);
-
-    int  (*set_aec2)            (sensor_t *sensor, int enable);
-    int  (*set_awb_gain)        (sensor_t *sensor, int enable);
-    int  (*set_agc_gain)        (sensor_t *sensor, int gain);
-    int  (*set_aec_value)       (sensor_t *sensor, int gain);
-
-    int  (*set_special_effect)  (sensor_t *sensor, int effect);
-    int  (*set_wb_mode)         (sensor_t *sensor, int mode);
-    int  (*set_ae_level)        (sensor_t *sensor, int level);
-
-    int  (*set_dcw)             (sensor_t *sensor, int enable);
-    int  (*set_bpc)             (sensor_t *sensor, int enable);
-    int  (*set_wpc)             (sensor_t *sensor, int enable);
-
-    int  (*set_raw_gma)         (sensor_t *sensor, int enable);
-    int  (*set_lenc)            (sensor_t *sensor, int enable);
-
-    int  (*get_reg)             (sensor_t *sensor, int reg, int mask);
-    int  (*set_reg)             (sensor_t *sensor, int reg, int mask, int value);
-    int  (*set_res_raw)         (sensor_t *sensor, int startX, int startY, int endX, int endY, int offsetX, int offsetY, int totalX, int totalY, int outputX, int outputY, bool scale, bool binning);
-    int  (*set_pll)             (sensor_t *sensor, int bypass, int mul, int sys, int root, int pre, int seld5, int pclken, int pclk);
-    int  (*set_xclk)            (sensor_t *sensor, int timer, int xclk);
-  */
-
 void flashON( void ) {
 
 // global settings - ignoring html on/off
@@ -438,3 +395,36 @@ void doSnapSavePhoto( void ) {
 //  log_d( "Total space: %lluMB, Used space: %lluMB", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
 
 }
+
+/*
+typedef struct {
+    framesize_t framesize;//0 - 10
+    bool scale;
+    bool binning;
+    uint8_t quality;//0 - 63
+    int8_t brightness;//-2 - 2
+    int8_t contrast;//-2 - 2
+    int8_t saturation;//-2 - 2
+    int8_t sharpness;//-2 - 2
+    uint8_t denoise;
+    uint8_t special_effect;//0 - 6
+    uint8_t wb_mode;//0 - 4
+    uint8_t awb;
+    uint8_t awb_gain;
+    uint8_t aec;
+    uint8_t aec2;
+    int8_t ae_level;//-2 - 2
+    uint16_t aec_value;//0 - 1200
+    uint8_t agc;
+    uint8_t agc_gain;//0 - 30
+    uint8_t gainceiling;//0 - 6
+    uint8_t bpc;
+    uint8_t wpc;
+    uint8_t raw_gma;
+    uint8_t lenc;
+    uint8_t hmirror;
+    uint8_t vflip;
+    uint8_t dcw;
+    uint8_t colorbar;
+} camera_status_t;
+  */
