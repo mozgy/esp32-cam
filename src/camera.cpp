@@ -243,7 +243,7 @@ void flashLED( uint32_t flashONTime, bool forcedFlash ) {
 }
 
 // CAVEAT - capture *will* fail if stream is active - FIXME!
-void doSnapSavePhoto( void ) {
+esp_err_t doSnapSavePhoto( void ) {
 
   File photoFP;
   String photoFileDir;
@@ -291,7 +291,7 @@ void doSnapSavePhoto( void ) {
     photoFP = SD_MMC.open( photoFileName, FILE_WRITE );
     if( !photoFP ) {
       log_e( "SD Card file open for write error" );
-      return;
+      return ESP_FAIL;
     }
   }
 
@@ -310,7 +310,7 @@ void doSnapSavePhoto( void ) {
   if( !photoFrameBuffer ) {
     log_e( "Camera Capture Failed" );
     // photoFrame = load_from_dataFS( "no-pic-200x200.png" );
-    return;
+    return ESP_FAIL;
   }
   // if (fb->format == PIXFORMAT_JPEG) // ToDo Check, JPEG mandatory
 
@@ -396,6 +396,7 @@ void doSnapSavePhoto( void ) {
   log_d( "Capture Time: %uB %ums", (uint32_t)( photoFrameLength ), (uint32_t)( ( capture_end - capture_start )/1000 ) );
 //  log_d( "Total space: %lluMB, Used space: %lluMB", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
 
+  return ESP_OK;
 }
 
 /*

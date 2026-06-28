@@ -24,7 +24,6 @@ void asyncHandleNotFound( AsyncWebServerRequest* );
 void listDirectory( String, AsyncWebServerRequest* );
 esp_err_t loadFromSDCard( AsyncWebServerRequest* );
 void initAsyncWebServer( void );
-void doSnapSavePhoto( void );
 extern String photoSendPrusaConnect( void );
 extern bool prusaPrinterOnline;
 
@@ -42,6 +41,7 @@ extern int tickerCounter;
 
 extern void reconfigureCamera( void );
 extern void fnSetFrameSize( String );
+esp_err_t doSnapSavePhoto( void );
 
 extern String httpUsernameStr;
 extern String httpPasswordStr;

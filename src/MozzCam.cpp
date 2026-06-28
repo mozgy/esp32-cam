@@ -402,7 +402,9 @@ void loop() {
   if( tickerCamFired ) {
     tickerCamFired = false;
 #ifdef HAVE_CAMERA
-    doSnapSavePhoto();
+    if ( doSnapSavePhoto() != ESP_OK ) {
+      log_e( "Something went wrong!" );
+    }
 #endif
     int wifiStatus = WiFi.status();
     log_i( "%s, (RSSI): %d dBm, MAC=%s, IP=%s", get_wifi_status( wifiStatus ), WiFi.RSSI(), WiFi.macAddress().c_str(), ( WiFi.status() == WL_CONNECTED ) ? WiFi.localIP().toString().c_str() : "" );
