@@ -321,6 +321,7 @@ void doSnapSavePhoto( void ) {
     photoFrame += String( (char *) photoFrameBuffer->buf, photoFrameLength );
   } else {
     // insert Exif data here
+    // http://www.fifi.org/doc/jhead/exif-e.html
     photoFrame += '\xff';
     photoFrame += '\xd8';
     photoFrame += '\xff';
