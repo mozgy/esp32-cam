@@ -24,10 +24,10 @@ bool checkWebAuth( AsyncWebServerRequest *request ) {
 
   if( !request->authenticate( httpUsernameStr.c_str(), httpPasswordStr.c_str() ) ) {
     request->send( 200, "text/html", NOT_AUTHORIZED );
-    log_d("auth-false");
+    log_d( "auth-false" );
     return false;
   }
-  log_d("auth-true");
+  log_d( "auth-true" );
   return true;
 
 }
