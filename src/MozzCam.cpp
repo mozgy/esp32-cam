@@ -39,8 +39,6 @@ bool flashEnabled = FLASH_ENABLED;
 bool timeLapse = TIME_LAPSE_MODE;
 bool SDCardOK;
 
-bool bme280Found;
-
 #ifdef PRUSA_CONNECT
 bool prusaConnectActive = false;
 String prusaHTMLResponse;
@@ -54,12 +52,18 @@ u_int32_t tickerPrusaCounter, tickerPrusaMissed;
 u_int16_t prusaConnectInterval = PRUSA_CONNECT_INTERVAL;
 #endif
 
-Ticker tickerCam, tickerBME;
-boolean tickerCamFired, tickerBMEFired;
+#ifdef HAVE_BME280
+bool bme280Found;
+Ticker tickerBME;
+boolean tickerBMEFired;
+u_int32_t tickerBMECounter, tickerBMEMissed;
+#endif
+
+Ticker tickerCam;
+boolean tickerCamFired;
 u_int32_t tickerCamCounter, tickerCamMissed;
 u_int16_t timeLapseInterval = 60;
 u_int16_t oldTickerValue;
-u_int32_t tickerBMECounter, tickerBMEMissed;
 
 void funcCamTicker( void ) {
   tickerCamFired = true;
@@ -75,11 +79,13 @@ void funcPrusaTicker( void ) {
 }
 #endif
 
+#ifdef HAVE_BME280
 void funcBMETicker( void ) {
   tickerBMEFired = true;
   tickerBMECounter++;
   tickerBMEMissed++;
 }
+#endif
 
 void prnEspStats( void ) {
 
@@ -353,17 +359,17 @@ void setup() {
   rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
-#ifdef HAVE_BME280
-  log_d( "Before initBME!" );
-  initBME();  // *HAS* to be *after* initSDCard() if board has SDCard ! Hmm, maybe not before
-#endif
-
   log_d( "Before initAsyncWebServer!" );
   httpUsernameStr = "" + String( http_username );
   httpPasswordStr = "" + String( http_password );
   initAsyncWebServer();
   log_d( "Before initOTA!" );
   initOTA();
+
+#ifdef HAVE_BME280
+  log_d( "Before initBME!" );
+  initBME();  // *HAS* to be *after* initSDCard() if board has SDCard ! Hmm, maybe not before
+#endif
 
   tickerCamCounter = 0;
   tickerCamMissed = 0;

@@ -1,11 +1,15 @@
 
 #include <SD_MMC.h>
 #include <WiFi.h>
+#ifdef HAVE_BME280
 #include <Adafruit_BME280.h>    // DO *NOT* mix with #include "esp_camera.h" - sensor_t clash
+#endif
 
 #include "variables.h"
 
+#ifdef HAVE_BME280
 extern Adafruit_BME280 bme;
+#endif
 extern int tickerCamCounter;
 extern size_t photoFrameLength;
 extern bool SDCardOK;

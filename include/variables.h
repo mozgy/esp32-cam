@@ -16,7 +16,6 @@
 #define HIDE_ROOT_DIR false
 
 #undef HAVE_BME280
-#define SEALEVELPRESSURE_HPA (1013.25)
 
 #undef PRUSA_CONNECT
 
@@ -41,8 +40,11 @@ extern bool prusaPrinterOnline;
 extern String prusaHTMLResponse;
 #endif
 
+#ifdef HAVE_BME280
+#define SEALEVELPRESSURE_HPA (1013.25)
 extern void bmeSerialPrint( void );
 extern void initBME( void );
 extern bool bme280Found;
+#endif
 
 #endif

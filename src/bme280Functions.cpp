@@ -1,3 +1,4 @@
+#ifdef HAVE_BME280
 
 #include <Adafruit_BME280.h>    // DO *NOT* mix with #include "esp_camera.h" - sensor_t clash
 
@@ -42,3 +43,5 @@ void initBME( void ) {
   }
 
 }
+
+#endif
