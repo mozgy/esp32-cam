@@ -24,6 +24,8 @@ void asyncHandleNotFound( AsyncWebServerRequest* );
 void listDirectory( String, AsyncWebServerRequest* );
 esp_err_t loadFromSDCard( AsyncWebServerRequest* );
 void initAsyncWebServer( void );
+extern volatile uint32_t asyncStreamClients;
+
 extern String photoSendPrusaConnect( void );
 extern bool prusaPrinterOnline;
 

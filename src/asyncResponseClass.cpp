@@ -7,6 +7,8 @@
 
 #include "asyncResponseClass.h"
 
+volatile uint32_t asyncStreamClients = 0;
+
 AsyncBufferResponse::AsyncBufferResponse( uint8_t * buf, size_t len, const char * contentType ) {
   _buf = buf;
   _len = len;
@@ -93,7 +95,9 @@ AsyncJpegStreamResponse::AsyncJpegStreamResponse( void ) {
   _jpg_buf_len = 0;
   _jpg_buf = NULL;
   lastAsyncRequest = 0;
+  ++asyncStreamClients;
   memset(&_frame, 0, sizeof(camera_frame_t));
+  log_d( "MJPEG Stream START %p", this );
 }
 
 AsyncJpegStreamResponse::~AsyncJpegStreamResponse( void ) {
@@ -103,6 +107,9 @@ AsyncJpegStreamResponse::~AsyncJpegStreamResponse( void ) {
     }
     esp_camera_fb_return(_frame.fb);
   }
+  if( asyncStreamClients > 0 )
+    --asyncStreamClients;
+  log_d( "MJPEG Stream STOP %p", this );
 }
 
 bool AsyncJpegStreamResponse::_sourceValid( void ) const {

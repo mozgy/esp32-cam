@@ -245,6 +245,11 @@ void flashLED( uint32_t flashONTime, bool forcedFlash ) {
 // CAVEAT - capture *will* fail if stream is active - FIXME!
 esp_err_t doSnapSavePhoto( void ) {
 
+  if( asyncStreamClients > 0 ) {
+    log_w( "PhotoSnap asked while stream is active!" );
+    return ESP_FAIL;
+  }
+
   File photoFP;
   String photoFileDir;
   String photoFileName;

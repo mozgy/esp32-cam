@@ -123,8 +123,14 @@ void asyncHandleCapture( AsyncWebServerRequest *request ) {
     const AsyncWebParameter* arg = request->getParam( "_cb" );
     value = arg->value().c_str();
   }
-  if( !timeLapse )  // if on timelapse mode just take last photo taken
-    doSnapSavePhoto();
+  if( asyncStreamClients > 0 ) {  // reDo this *better*!
+    log_d( "Stream ACTIVE!" );
+  }
+  if( !timeLapse and asyncStreamClients == 0 ) { // if on timelapse mode just take last photo taken
+    if ( doSnapSavePhoto() != ESP_OK ) {
+      log_e( "Something went wrong!" );
+    }
+  }
   AsyncWebServerResponse *response = request->beginResponse( 200, "image/jpeg", (const u_int8_t *)photoFrame.c_str(), photoFrameLength );
   response->addHeader( "Content-Disposition", "inline; filename=photo.jpg" );
   response->addHeader( "Access-Control-Allow-Origin", "*" );

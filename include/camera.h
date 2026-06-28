@@ -23,6 +23,8 @@ extern uint8_t imageRotation;
 extern bool flashEnabled;
 extern bool SDCardOK;
 
+extern volatile uint32_t asyncStreamClients;
+
 void initCam( void );
 void flashON( void );
 void flashOFF( void );
