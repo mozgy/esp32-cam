@@ -165,6 +165,7 @@ void flashON( bool forcedFlash ) {
 #ifdef CAMERA_MODEL_ESP32S3_CAM
   rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
 #endif
+  log_d( "Flash is ON, smile!" );
 
 }
 
