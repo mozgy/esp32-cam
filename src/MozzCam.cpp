@@ -341,6 +341,7 @@ void setup() {
 
 #ifdef HAVE_CAMERA
   log_d( "Before initCam!" );
+  // esp_log_level_set( "cam_hal", ESP_LOG_WARN );    // test this
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
 #endif
 
