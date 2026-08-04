@@ -2,7 +2,7 @@
 #include <ArduinoOTA.h>
 #include "esp_camera.h"
 
-#include "camera_model.h"
+#include "camera.h"
 #include "mywifi.h"
 #include "credentials.h"
 

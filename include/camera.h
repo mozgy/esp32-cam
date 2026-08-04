@@ -9,14 +9,19 @@ extern size_t photoFrameLength;
 extern struct tm photoSnapTime;
 extern uint8_t imageRotation;
 
-#include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
+// Select (only one) camera model - *before* camera_pins.h
+// #define CAMERA_MODEL_ESP_EYE
+#define CAMERA_MODEL_AI_THINKER
+// #define CAMERA_MODEL_XIAO_ESP32S3
+// #define CAMERA_MODEL_ESP32S3_EYE
+// #define CAMERA_MODEL_ESP32S3_CAM
+// Select (only one) camera model - *before* camera_pins.h
+
+// #include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "camera_pins.h"
 
 #define FLASH_LED LED_GPIO_NUM
-// #define AI_THINKER_LED 33    // onboard red one
-// #define LED_GPIO_NUM  4  // CAMERA_MODEL_AI_THINKER
-// #define LED_GPIO_NUM 48  // CAMERA_MODEL_ESP32S3_CAM
-// #define FLASH_ENABLE_HW true // not yet used
+#define AI_THINKER_LED 33    // onboard red one
 
 #include "variables.h"
 
