@@ -1,10 +1,11 @@
-#ifdef PRUSA_CONNECT
-
 #include <stddef.h>
 #include <WiFiClientSecure.h>
 #include <ESP32Ping.h>
 
 #include "variables.h"
+
+#ifdef PRUSA_CONNECT
+
 #include "credentials.h"
 #include "certificate.h"
 
