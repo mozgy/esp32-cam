@@ -59,6 +59,8 @@ void initCam( void ) {
   pinMode( 14, INPUT_PULLUP );
 #endif
 
+  config.frame_size = FRAMESIZE_VGA;  // Mozz
+
   // camera init
   esp_err_t err = esp_camera_init( &config );
   if ( err != ESP_OK ) {
@@ -69,17 +71,13 @@ void initCam( void ) {
   log_i( "Camera ON!" );
 
   sensor_t * s = esp_camera_sensor_get();
-
 #if defined(CAMERA_MODEL_M5STACK_WIDE) || defined(CAMERA_MODEL_M5STACK_ESP32CAM)
   s->set_vflip(s, 1);
   s->set_hmirror(s, 1);
 #endif
-
 #if defined(CAMERA_MODEL_ESP32S3_EYE)
   s->set_vflip(s, 1);
 #endif
-
-  s->set_framesize( s, FRAMESIZE_VGA );
 
 }
 
