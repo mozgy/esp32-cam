@@ -4,11 +4,6 @@
 #include <Arduino.h>
 #include "esp_camera.h"
 
-typedef const String picSizeStrings_t;
-extern size_t photoFrameLength;
-extern struct tm photoSnapTime;
-extern uint8_t imageRotation;
-
 // Select (only one) camera model - *before* camera_pins.h
 // #define CAMERA_MODEL_ESP_EYE
 #define CAMERA_MODEL_AI_THINKER
@@ -19,11 +14,22 @@ extern uint8_t imageRotation;
 
 // #include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "camera_pins.h"
+#include "variables.h"
 
 #define FLASH_LED LED_GPIO_NUM
 #define AI_THINKER_LED 33    // onboard red one
 
-#include "variables.h"
+#ifdef CAMERA_MODEL_AI_THINKER
+  #undef FLASH_NEOPIXEL
+#endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM
+  #define FLASH_NEOPIXEL
+#endif
+
+typedef const String picSizeStrings_t;
+extern size_t photoFrameLength;
+extern struct tm photoSnapTime;
+extern uint8_t imageRotation;
 
 extern bool flashEnabled;
 extern bool SDCardOK;
@@ -34,6 +40,12 @@ void initCam( void );
 void flashON( void );
 void flashOFF( void );
 void flashLED( uint32_t );
+void flashLEDatStart( void );
+void flashLEDafterFS( void );
+void flashLEDafterInitSD( void );
+void flashLEDafterInitWiFi( void );
+void flashLEDafterInitWeb( void );
+void flashLEDstreamON( void );
 void doSnapPhoto( void );
 
 /*

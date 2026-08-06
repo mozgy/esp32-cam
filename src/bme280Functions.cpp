@@ -2,7 +2,7 @@
 
 #include <Adafruit_BME280.h>    // DO *NOT* mix with #include "esp_camera.h" - sensor_t clash
 
-#include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
+#include "camera.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "variables.h"
 
 #ifdef CAMERA_MODEL_AI_THINKER

@@ -142,13 +142,13 @@ void flashON( void ) {
   if( !flashEnabled )
     return;
 
-#ifdef CAMERA_MODEL_AI_THINKER
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+#else
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, HIGH );
 #endif
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
-#endif
+
   log_d( "Flash is ON, smile!" );
 
 }
@@ -158,20 +158,20 @@ void flashON( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
-#ifdef CAMERA_MODEL_AI_THINKER
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
+#else
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, HIGH );
 #endif
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
-#endif
+
   log_d( "Flash is ON, smile!" );
 
 }
 
 void flashON( uint8_t R, uint8_t G, uint8_t B ) {
 
-#ifdef CAMERA_MODEL_ESP32S3_CAM
+#ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, R, G, B );
 #endif
 
@@ -187,12 +187,11 @@ void flashOFF( void ) {
   if( !flashEnabled )
     return;
 
-#ifdef CAMERA_MODEL_AI_THINKER
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
+#else
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, LOW );
-#endif
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 // DATA1 / Flash LED - PIN4
@@ -209,12 +208,11 @@ void flashOFF( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
-#ifdef CAMERA_MODEL_AI_THINKER
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
+#else
   pinMode( FLASH_LED, OUTPUT );
   digitalWrite( FLASH_LED, LOW );
-#endif
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #endif
 
 }
@@ -241,6 +239,73 @@ void flashLED( uint32_t flashONTime, bool forcedFlash ) {
   flashOFF( true );
 
 }
+
+void flashLED( uint32_t flashONTime, uint8_t red, uint8_t green, uint8_t blue ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, red, green, blue );
+  delay( flashONTime );
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
+#else   // if NEOPIXEL not available we fail back to old onewire
+  flashLED( 50, true );
+#endif
+
+}
+
+void flashLEDatStart( void ) {
+
+  flashLED( 300, true ); delay( 80 ); flashLED( 300, true );
+
+}
+
+void flashLEDafterFS( void ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
+#else
+  flashLED( 50, true );
+#endif
+
+}
+
+void flashLEDafterInitSD( void ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
+#else
+  flashLED( 50, true ); delay( 80 ); flashLED( 50, true ); delay( 80 ); flashLED( 50, true );
+#endif
+
+}
+
+void flashLEDafterInitWiFi( void ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, 0, 0 );
+#else
+  flashLED( 50, true ); delay( 80 ); flashLED( 50, true );
+#endif
+
+}
+
+void flashLEDafterInitWeb( void ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 0, 0, 0 );
+#else
+  flashLED( 50, true );
+#endif
+
+}
+
+void flashLEDstreamON( void ) {
+
+#ifdef FLASH_NEOPIXEL
+  rgbLedWrite( FLASH_LED, 12, 0, 0 ); // turn ON faint RED :)
+#endif
+
+}
+
 
 // CAVEAT - capture *will* fail if stream is active - FIXME!
 esp_err_t doSnapSavePhoto( void ) {

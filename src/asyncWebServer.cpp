@@ -175,9 +175,7 @@ void asyncHandleStream( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleStream " );
 
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 12, 0, 0 ); // turn ON faint RED :)
-#endif
+  flashLEDstreamON();
 
   if ( timeLapse ) {
     // request->send( 200, "text/html", TIME_LAPSE_ACTIVE );

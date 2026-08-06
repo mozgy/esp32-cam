@@ -10,8 +10,9 @@
 #include <Ticker.h>
 #include <ArduinoOTA.h>
 
-#include "credentials.h"
 #include "variables.h"
+
+#include "credentials.h"
 #include "camera.h"
 #include "mywebserver.h"
 #include "mywifi.h"
@@ -289,12 +290,6 @@ void initSDCard( void ) {
     // log_e( "DIR exists .." );
   }
 
-#ifdef CAMERA_MODEL_AI_THINKER
-  flashLED( 50, true ); delay( 80 ); flashLED( 50, true ); delay( 80 ); flashLED( 50, true );
-#endif
-
-  return;
-
 }
 
 void setup() {
@@ -311,11 +306,13 @@ void setup() {
   // esp_wifi_internal_set_log_level(WIFI_LOG_VERBOSE);
   // esp_wifi_internal_set_log_mod(WIFI_LOG_MODULE_ALL, WIFI_LOG_SUBMODULE_ALL, true);
 
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-//  rgbledWrite( FLASH_LED, (RGB_BRIGHTNESS >> 1), 0, 0 );
+  prnEspStats();
+
+#if !defined(CAMERA_MODEL_AI_THINKER) && !defined (CAMERA_MODEL_ESP32S3_CAM)
+  flashEnabled = false;
 #endif
 
-  prnEspStats();
+  flashLEDatStart();
 
   if( !LittleFS.begin( true ) ) {
     log_d( "Formatting LittleFS" );
@@ -323,20 +320,14 @@ void setup() {
       log_e( "An Error has occurred while mounting LittleFS" );
     }
   }
-
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 0, 0, RGB_BRIGHTNESS );
-#endif
+  flashLEDafterFS();
 
 #ifdef HAVE_SDCARD
   log_d( "Before initSDCard!" );
   // [E][SD_MMC.cpp:132] begin(): Failed to mount filesystem. If you want the card to be formatted, set format_if_mount_failed = true.
   initSDCard();  // *HAS* to be *before* initCam() if board has SDCard !
   loadConfigFromSD();
-#endif
-
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 0, RGB_BRIGHTNESS, 0 );
+  flashLEDafterInitSD();
 #endif
 
 #ifdef HAVE_CAMERA
@@ -345,20 +336,13 @@ void setup() {
   initCam();  // *HAS* to be *after* initSDCard() if board has SDCard !
 #endif
 
-#if !defined(CAMERA_MODEL_AI_THINKER) && !defined (CAMERA_MODEL_ESP32S3_CAM)
-  flashEnabled = false;
-#endif
-
   log_d( "Before initWiFi!" );
   wifiSSIDStr = "" + String( wifi_ssid );;
   wifiPasswordStr = "" + String( wifi_password );;
   initWiFi();
   log_d( "Before NTP!" );
   getNTPTime();
-
-#ifdef CAMERA_MODEL_ESP32S3_CAM
-  rgbLedWrite( FLASH_LED, 0, 0, 0 );
-#endif
+  flashLEDafterInitWiFi();
 
   log_d( "Before initAsyncWebServer!" );
   httpUsernameStr = "" + String( http_username );
@@ -366,6 +350,7 @@ void setup() {
   initAsyncWebServer();
   log_d( "Before initOTA!" );
   initOTA();
+  flashLEDafterInitWeb();
 
 #ifdef HAVE_BME280
   log_d( "Before initBME!" );
@@ -423,6 +408,9 @@ void loop() {
     float temp_celsius = temperatureRead();
     log_i( "Temp onBoard %.2f°C", temp_celsius );
 #endif
+    if( asyncStreamClients == 0 ) {
+      flashOFF(); // turn OFF RED on neopixel LEDs
+    }
   }
 
 #ifdef HAVE_BME280
