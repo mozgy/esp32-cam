@@ -30,7 +30,12 @@ String getHTMLStatisticsText( void ) {
   webText += "Cam-" + cameraNameSuffix + "<br>";
   webText += "Software Version " + String( SW_VERSION ) + "<br>";
   webText += "<br>SDK: " + String( ESP.getSdkVersion() );
-  webText += "<br>ESP32 Chip: " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
+  webText += "<br>Chip: " + String( ESP.getChipModel() ) + ", Rev " + String( ESP.getChipRevision() );
+#ifdef ARDUINO_ESP32S3_DEV
+  float temp_celsius = temperatureRead();
+  sprintf( tmpStr, ", %.2f°C", temp_celsius );
+  webText += String( tmpStr );
+#endif
 #ifdef HAVE_SDCARD
   if ( SDCardOK ) {
     sprintf( tmpStr, "<br>Total space: %lluMB - Used space %lluMB\n", SD_MMC.totalBytes() / (1024 * 1024), SD_MMC.usedBytes() / (1024 * 1024) );
