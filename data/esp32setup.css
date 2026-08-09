@@ -1,4 +1,4 @@
-/* github copy from index_ov5640_html_gz */
+/* github copy parts from index_ov5640_html_gz */
 
 body {
   font-family: Arial,Helvetica,sans-serif;
@@ -93,6 +93,11 @@ section#buttons {
 }
 
 #nav-toggle {
+  cursor: pointer;
+  display: block
+}
+
+#nav-toggle-adv {
   cursor: pointer;
   display: block
 }
@@ -369,5 +374,21 @@ input.toggle-section-button {
 }
 
 input.toggle-section-button:checked+section.toggle-section {
+  display: none
+}
+
+label.toggle-adv-section-label {
+  cursor: pointer;
+  display: block
+}
+
+input.toggle-adv-section-button {
+  outline: 0;
+  opacity: 0;
+  width: 0;
+  height: 0
+}
+
+input.toggle-adv-section-button:checked+section.toggle-adv-section {
   display: none
 }

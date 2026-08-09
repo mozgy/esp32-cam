@@ -22,30 +22,40 @@
               </section>
 
               <hr style="width:100%">
-              <label for="nav-toggle-reg" class="toggle-section-label">&#9776;&nbsp;&nbsp;Advanced Settings</label>
+
+              <label for="nav-toggle-reg" class="toggle-section-label">&#9776;&nbsp;&nbsp;Settings</label>
               <input type="checkbox" id="nav-toggle-reg" class="hidden toggle-section-button" checked="checked">
               <section class="toggle-section">
 
                 <div class="input-group" id="framesize-group">
                   <label for="framesize">Resolution</label>
                   <select id="framesize" class="default-action">
-                    <!-- 2MP -->
-                    <option value="15">UXGA(1600x1200)</option> <!-- TOO BIG -->
-                    <option value="14">SXGA(1280x1024)</option>
+                    <!-- OV2640 - 2MP -->
+                    <!-- <option value="15">UXGA(1600x1200)</option> --> <!-- TOO BIG -->
+                    <option value="14">SXGA(1280x1024)</option>   <!-- TOO BIG -->
                     <option value="13">HD(1280x720)</option>
                     <option value="12">XGA(1024x768)</option>
-                    <option value="11">SVGA(800x600)</option>
+                    <option value="11">SVGA(800x600)</option>     <!-- MAX for OV3660 ??? -->
                     <option value="10">VGA(640x480)</option>
                     <option value="9">HVGA(480x320)</option>
-                    <option value="8">CIF(400x296)</option>
-                    <option value="7">320x320(320x320)</option>
+                    <!-- <option value="8">CIF(400x296)</option> -->
+                    <!-- <option value="7">320x320(320x320)</option> -->
                     <option value="6">QVGA(320x240)</option>
-                    <option value="5">240x240</option>
+                    <!-- <option value="5">240x240</option> -->
                     <option value="4">HQVGA(240x176)</option>
-                    <option value="3">QCIF(176x144)</option>
-                    <option value="2">128X128(128X128)</option>
+                    <!-- <option value="3">QCIF(176x144)</option> -->
+                    <!-- <option value="2">128X128(128X128)</option> -->
                     <option value="1">QQVGA(160x120)</option>
-                    <option value="0">96x96</option>
+                    <!-- <option value="0">96x96</option> -->
+                  </select>
+                </div>
+                <div class="input-group" id="rotation-group">
+                  <label for="rotation">Image Rotation</label>
+                  <select id="rotation" class="default-action">
+                      <option value="1" selected="selected">0°</option>
+                      <option value="6">90°</option>
+                      <option value="3">180°</option>
+                      <option value="8">270°</option>
                   </select>
                 </div>
                
@@ -78,6 +88,12 @@
                     <label class="slider" for="vflip"></label>
                   </div>
                 </div>
+
+                <hr style="width:100%">
+
+              <label for="nav-toggle-adv-reg" class="toggle-adv-section-label">&#9776;&nbsp;&nbsp;Advanced Settings</label>
+              <input type="checkbox" id="nav-toggle-adv-reg" class="hidden toggle-adv-section-button" checked="unchecked">
+              <section class="toggle-adv-section">
 
                 <div class="input-group" id="quality-group">
                   <label for="quality">Quality</label>
@@ -142,15 +158,22 @@
                   </select>
                 </div>
 
-                <div class="input-group" id="rotation-group">
-                  <label for="rotation">Image Rotation</label>
-                  <select id="rotation" class="default-action">
-                      <option value="1" selected="selected">0°</option>
-                      <option value="6">90°</option>
-                      <option value="3">180°</option>
-                      <option value="8">270°</option>
-                  </select>
+                <!--
+                <div class="input-group" id="prusaconnect-group">
+                  <label for="prusaconnect">Prusa Connect</label>
+                  <div class="switch">
+                      <input id="prusaconnect" type="checkbox" class="default-action" checked="checked">
+                      <label class="slider" for="prusaconnect"></label>
+                  </div>
                 </div>
+                <div class="input-group" id="prusadelay-group">
+                  <label for="prusadelay">Prusa Send Delay</label>
+                  <div class="range-min">4</div>
+                  <input type="range" id="prusadelay" min="6" max="300" value="75" class="default-action">
+                  <div class="range-max">63</div>
+                </div>
+                -->
+              </section>
 
               </section>
 
