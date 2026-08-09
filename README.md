@@ -5,8 +5,11 @@ ESP32 Cam - TimeLapse, Streaming, Prusa Connect ..
 ESP32-CAM board with OV2640 camera module, there are several hardware versions of the board
 - original AI-Thinker board
 - different copies, some exact some with notable differences
-- S3 version with more PSRAM, faster<br>
-<img src="doc/esp32-cam-2.jpg" width=20% height=20%>
+- S3 versions with more PSRAM, faster<br>
+NEOPixel Flash LED
+<img src="doc/esp32-s3-cam-1.jpg" width=20% height=20%><br>
+normal Flash LED
+<img src="doc/esp32-s3-cam-2.jpg" width=20% height=20%>
 
 ## Flashing HW helper boards
 - CH340 chip, USB micro<br>
@@ -22,13 +25,29 @@ ESP32-CAM board with OV2640 camera module, there are several hardware versions o
 Insert ESP32-CAM into helper board and connect it to PC.
 
 ### Visual Studio Code with PlatformIO IDE
-<a href=doc/vsc.md>VSC with PlatformIO</a>
+Open Visual Studio Code and choose 'Open Folder' where this source is unpacked. If this is the very first time using PlatformIO, VSC will do some install and config magic and probably few GUI restarts.
+Before compiling check file include/credentials_sample.h, fill it with actual WiFi credentials and rename the file to credentials.h.
+Next check file platformio.ini for upload/flashing details, first time should be wire connection -
+```
+; upload_port = 192.168.x.y
+; upload_protocol = espota
+upload_protocol = esptool
+```
+after succesfull first flash OTA is also possible, 'Serial Monitor' option can be used to find out DHCP assigned IP -
+```
+upload_port = 192.168.x.y
+upload_protocol = espota
+; upload_protocol = esptool
+```
+Two more steps and we're done -
+- Explorer - PlatformIO: Upload
+- PlatformIO - esp32cam - Upload Filesystem Image
 
 ### Arduino IDE
 Gremlins ate this part - rewrite needed ..
 
 ## Using Camera
-Connect to the DHCP assigned IP and try several sublinks from next chapter!
+Connect to the DHCP assigned IP and enjoy!
 
 ### Notable Weblinks
 Web server listening port is 8080, changed from default 80 for easier router port-mapping, configurable at start of <a href=src/asyncWebServer.cpp>Web Server code</a>
@@ -45,10 +64,10 @@ Web server listening port is 8080, changed from default 80 for easier router por
 - {CAM_IP:8080}/archive<br>
     browse saved timelapse pictures
 - {CAM_IP:8080}/prusa<br>
-    force upload of last captured photo to Prusa Connect
+    upload of last captured photo to Prusa Connect
 
 ## Configuration details
-- <a href=include/camera_model.h>Camera Model</a><br>
+- <a href=include/camera.h>Camera Model</a><br>
     uncomment only one of the #define that is correct for your camera board<br>
     if you are using ESP32S3-CAM also copy <a href=doc/esp32s3cam.json>ESP32S3-CAM board definition</a> to PlatformIO dir C:\Users\...\.platformio\platforms\espressif32\boards dir and use 'board = esp32s3cam' in <a href=platformio.ini>PlatformIO ini</a>
 - <a href=include/variables.h>Config Definitions</a><br>
@@ -58,7 +77,7 @@ Web server listening port is 8080, changed from default 80 for easier router por
     - set `CAM_SERIAL` if you have several camera boards
     - set `FLASH_ENABLED true` if you want to use flash LED
     - set `#undef HAVE_SDCARD` if you don't want to use microSD
-    - set `TIME_LAPSE_MODE true` for camera board to start saving interval photos to microSD
+    - set `TIME_LAPSE_MODE true` for camera board to start saving photos in intervals to microSD
 - Prusa Connect Setup<br>
     - login to <a href=https://connect.prusa3d.com>Prusa Connect</a>
     - choose registered printer
