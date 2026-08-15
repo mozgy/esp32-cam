@@ -140,14 +140,23 @@ void flashON( void ) {
   if( !flashEnabled )
     return;
 
+#ifdef FLASH_LED
+
 #ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
 #else
   pinMode( FLASH_LED, OUTPUT );
-  digitalWrite( FLASH_LED, HIGH );
+  #ifdef REVERSE_PULLUP
+    digitalWrite( FLASH_LED, LOW );
+  #else
+    digitalWrite( FLASH_LED, HIGH );
+  #endif
 #endif
-
   log_d( "Flash is ON, smile!" );
+
+#else
+  log_d( "No Flash HW!" );
+#endif
 
 }
 
@@ -156,40 +165,58 @@ void flashON( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
+#ifdef FLASH_LED
+
 #ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS );
 #else
   pinMode( FLASH_LED, OUTPUT );
-  digitalWrite( FLASH_LED, HIGH );
+  #ifdef REVERSE_PULLUP
+    digitalWrite( FLASH_LED, LOW );
+  #else
+    digitalWrite( FLASH_LED, HIGH );
+  #endif
 #endif
 
   log_d( "Flash is ON, smile!" );
+
+#else
+  log_d( "No Flash HW!" );
+#endif
 
 }
 
 void flashON( uint8_t R, uint8_t G, uint8_t B ) {
 
+#ifdef FLASH_LED
+
 #ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, R, G, B );
+#endif
+
+#else
+  log_d( "No Flash HW!" );
 #endif
 
 }
 
 void flashOFF( void ) {
 
-// global settings - ignoring html on/off
-//  if( !FLASH_ENABLE )
-//    return;
-
 // html switch on/off
   if( !flashEnabled )
     return;
+
+#ifdef FLASH_LED
 
 #ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #else
   pinMode( FLASH_LED, OUTPUT );
-  digitalWrite( FLASH_LED, LOW );
+  #ifdef REVERSE_PULLUP
+    digitalWrite( FLASH_LED, HIGH );
+  #else
+    digitalWrite( FLASH_LED, LOW );
+  #endif
 #endif
 
 // DATA1 / Flash LED - PIN4
@@ -199,6 +226,10 @@ void flashOFF( void ) {
 //  pinMode( FLASH_LED, OUTPUT );
 //  digitalWrite( FLASH_LED, LOW );
 
+#else
+  log_d( "No Flash HW!" );
+#endif
+
 }
 
 void flashOFF( bool forcedFlash ) {
@@ -206,11 +237,21 @@ void flashOFF( bool forcedFlash ) {
   if( !forcedFlash )
     return;
 
+#ifdef FLASH_LED
+
 #ifdef FLASH_NEOPIXEL
   rgbLedWrite( FLASH_LED, 0, 0, 0 );
 #else
   pinMode( FLASH_LED, OUTPUT );
-  digitalWrite( FLASH_LED, LOW );
+  #ifdef REVERSE_PULLUP
+    digitalWrite( FLASH_LED, HIGH );
+  #else
+    digitalWrite( FLASH_LED, LOW );
+  #endif
+#endif
+
+#else
+  log_d( "No Flash HW!" );
 #endif
 
 }

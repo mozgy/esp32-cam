@@ -12,19 +12,32 @@
 // #define CAMERA_MODEL_ESP32S3_CAM
 // Select (only one) camera model - *before* camera_pins.h
 
-// #include "camera_model.h"   // "esp_camera.h" and <Adafruit_BME280.h> - sensor_t clash
 #include "camera_pins.h"
 #include "variables.h"
 
-#define FLASH_LED LED_GPIO_NUM
 #define AI_THINKER_LED 33    // onboard red one
 
 #ifdef CAMERA_MODEL_AI_THINKER
   #undef FLASH_NEOPIXEL
+  #undef REVERSE_PULLUP
+  #define FLASH_LED LED_GPIO_NUM
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
   #define FLASH_NEOPIXEL
+  #undef REVERSE_PULLUP
+  #define FLASH_LED LED_GPIO_NUM
 #endif
+#ifdef CAMERA_MODEL_ESP32S3_CAM_NEW
+  #undef FLASH_NEOPIXEL
+  #define REVERSE_PULLUP
+  #define FLASH_LED 1
+#endif
+#ifdef CAMERA_MODEL_Waveshare_ESP32S3_CAM
+  #undef FLASH_NEOPIXEL
+  #undef REVERSE_PULLUP
+  #undef FLASH_LED
+#endif
+
 
 typedef const String picSizeStrings_t;
 extern size_t photoFrameLength;
