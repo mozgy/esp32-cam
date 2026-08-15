@@ -3,6 +3,7 @@
 
 #include "variables.h"
 #include "mywebserver.h"
+#include "mywifi.h"
 
 extern String prusaResponseCode;
 
@@ -59,6 +60,7 @@ String getHTMLStatisticsText( void ) {
     webText += "Disabled";
   }
 #endif
+  webText += "<br>RSSI: " + String( WiFi.RSSI() );
   fnElapsedStr( elapsedTimeString );
   webText += "<br>" + String( elapsedTimeString );
 // log_v( "%s - Startup Time : %d-%02d-%02d %02d:%02d:%02d", elapsedTimeString, (startTime.tm_year)+1900, (startTime.tm_mon)+1, startTime.tm_mday, startTime.tm_hour , startTime.tm_min, startTime.tm_sec );
