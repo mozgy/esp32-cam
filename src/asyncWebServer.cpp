@@ -42,7 +42,10 @@ void asyncHandleRoot( AsyncWebServerRequest *request ) {
 void asyncHandleStatistics( AsyncWebServerRequest *request ) {
 
   log_d( " asyncHandleStatistics " );
-  request->send( 200, "text/html", getHTMLStatisticsText() );
+//  request->send( 200, "text/html", getHTMLStatisticsText() );
+  AsyncWebServerResponse *response = request->beginResponse( 200, "text/html", getHTMLStatisticsText() );
+  response->addHeader( "Access-Control-Allow-Origin", "*" );
+  request->send( response );
 
 }
 
