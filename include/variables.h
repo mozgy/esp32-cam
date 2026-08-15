@@ -5,7 +5,7 @@
 
 #define SW_VERSION "0.34.6"
 
-#define HAVE_CAMERA
+#define HAVE_CAMERA   // mandatory atm
 #define ESP_CAM_HOSTNAME "mozz-cam"
 #define CAM_SERIAL "2"
 
