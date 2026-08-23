@@ -10,7 +10,9 @@
 // #define CAMERA_MODEL_XIAO_ESP32S3
 // #define CAMERA_MODEL_ESP32S3_EYE
 // #define CAMERA_MODEL_ESP32S3_CAM
-// #define CAMERA_MODEL_ESP32S3_CAM_NEW
+  // #define CAMERA_MODEL_ESP32S3_CAM_VARIANT_1
+  // #define CAMERA_MODEL_ESP32S3_CAM_VARIANT_2
+  // #define CAMERA_MODEL_ESP32S3_CAM_VARIANT_3
 // #define CAMERA_MODEL_Waveshare_ESP32S3_CAM
 // Select (only one) camera model - *before* camera_pins.h
 
@@ -24,16 +26,18 @@
   #define AI_THINKER_LED 33    // onboard red one
 #endif
 #ifdef CAMERA_MODEL_ESP32S3_CAM
-  #define FLASH_NEOPIXEL
-  #undef REVERSE_PULLUP
-  #define FLASH_LED LED_GPIO_NUM
-#endif
-#ifdef CAMERA_MODEL_ESP32S3_CAM_NEW
-  #undef FLASH_NEOPIXEL
-//  #define REVERSE_PULLUP
-  #undef REVERSE_PULLUP
-//  #define FLASH_LED 1
-  #define FLASH_LED LED_GPIO_NUM
+  #if defined(CAMERA_MODEL_ESP32S3_CAM_VARIANT_1)
+    #define FLASH_NEOPIXEL
+    #undef REVERSE_PULLUP
+    #define FLASH_LED LED_GPIO_NUM
+  #elif defined(CAMERA_MODEL_ESP32S3_CAM_VARIANT_2)
+    #undef FLASH_NEOPIXEL
+    #define REVERSE_PULLUP
+    #define FLASH_LED 1
+  #elif defined(CAMERA_MODEL_ESP32S3_CAM_VARIANT_3)
+    #undef FLASH_NEOPIXEL
+    #undef REVERSE_PULLUP
+    #define FLASH_LED LED_GPIO_NUM
 #endif
 #ifdef CAMERA_MODEL_Waveshare_ESP32S3_CAM
   #undef FLASH_NEOPIXEL
