@@ -298,7 +298,7 @@
 #define HREF_GPIO_NUM 7
 #define PCLK_GPIO_NUM 13
 
-#elif defined(CAMERA_MODEL_ESP32S3_CAM)
+#elif defined(CAMERA_MODEL_ESP32S3_CAM) || defined(CAMERA_MODEL_ESP32S3_CAM_NEW)
 #define PWDN_GPIO_NUM -1
 #define RESET_GPIO_NUM -1
 #define XCLK_GPIO_NUM 15
