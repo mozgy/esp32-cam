@@ -1,15 +1,24 @@
 # esp32-cam
 ESP32 Cam - TimeLapse, Streaming, Prusa Connect ..
 
-## Hardware
-ESP32-CAM board with OV2640 camera module, there are several hardware versions of the board
-- original AI-Thinker board
-- different copies, some exact some with notable differences
-- S3 versions with more PSRAM, faster<br>
-NEOPixel Flash LED
-<img src="doc/esp32-s3-cam-1.jpg" width=20% height=20%><br>
-normal Flash LED
-<img src="doc/esp32-s3-cam-2.jpg" width=20% height=20%>
+---
+
+# 🔧 Hardware
+
+The project is designed primarily for **ESP32-CAM boards with an OV2640 camera** but ie OV3660 works just fine. 
+
+### ESP32-CAM variants
+
+| Picture                                        | Description              | Notes              |
+| ---------------------------------------------- | ------------------------ | ------------------ |
+| <img src="doc/esp32-cam-1.jpg" width="30%">    | AI-Thinker - 'Original'  | 4x Rs              |
+| <img src="doc/esp32-cam-2.jpg" width="30%">    | AI-Thinker - clone       | 6x Rs              |
+| <img src="doc/esp32-s3-cam-1.jpg" width="30%"> | ESP32 S3 - ver1          | NeoPixel at IO48   |
+| <img src="doc/esp32-s3-cam-2.jpg" width="30%"> | ESP32 S3 - ver2          | normal LED at IO01 |
+| <img src="doc/esp32-s3-cam-3.jpg" width="30%"> | ESP32 S3 - ver3          | uknown LED IO atm  |
+| <img src="doc/esp32-s3-cam-4.jpg" width="30%"> | ESP32 S3 - Waveshare     | no FlashLED at all |
+
+---
 
 ## Flashing HW helper boards
 - CH340 chip, USB micro<br>
@@ -24,47 +33,49 @@ normal Flash LED
 ## Instalation
 Insert ESP32-CAM into helper board and connect it to PC.
 
-### Visual Studio Code with PlatformIO IDE
-Open Visual Studio Code and choose 'Open Folder' where this source is unpacked. If this is the very first time using PlatformIO, VSC will do some install and config magic and probably few GUI restarts.
-Before compiling check file include/credentials_sample.h, fill it with actual WiFi credentials and rename the file to credentials.h.
-Next check file platformio.ini for upload/flashing details, first time should be wire connection -
-```
-; upload_port = 192.168.x.y
-; upload_protocol = espota
-upload_protocol = esptool
-```
-after succesfull first flash OTA is also possible, 'Serial Monitor' option can be used to find out DHCP assigned IP -
-```
-upload_port = 192.168.x.y
-upload_protocol = espota
-; upload_protocol = esptool
-```
-Two more steps and we're done -
-- Explorer - PlatformIO: Upload
-- PlatformIO - esp32cam - Upload Filesystem Image
+### <a href=doc/vsc.md>Visual Studio Code with Platformio IDE</a>
+### <a href=doc/ardino.md>Arduino IDE</a>
 
-### Arduino IDE
-Gremlins ate this part - rewrite needed ..
+---
 
-## Using Camera
-Connect to the DHCP assigned IP and enjoy!
+# 📷 Using the Camera
 
-### Notable Weblinks
+Once the firmware is running, connect to the IP address assigned by your DHCP server.
+
+For example:
+
+```text
+http://192.168.x.y:8080/
+```
+
+Log in with the credentials configured in `credentials.h`.
+
+---
+
+# 🌐 Web Interface
+
+## Useful URLs
 Web server listening port is 8080, changed from default 80 for easier router port-mapping, configurable at start of <a href=src/asyncWebServer.cpp>Web Server code</a>
-- {CAM_IP:8080}/login<br>
-    enter credentials
-- {CAM_IP:8080}/espReset<br>
-    force complete ESP32-CAM reset
-- {CAM_IP:8080}/sdcard<br>
-    reinit SD Card after (re)inserting microSD
-- {CAM_IP:8080}/metrics<br>
-    output metrics for prometheus/grafana nerds
-- {CAM_IP:8080}/scan<br>
-    JSON display of neighbour WiFi SSID/Channels
-- {CAM_IP:8080}/archive<br>
-    browse saved timelapse pictures
-- {CAM_IP:8080}/prusa<br>
-    upload of last captured photo to Prusa Connect
+
+| URL         | Description                                           |
+| ----------- | ----------------------------------------------------- |
+| `/login`    | Web authentication                                    |
+| `/espReset` | Force a complete ESP32 reset                          |
+| `/sdcard`   | Reinitialize the SD card after inserting/replacing it |
+| `/archive`  | Browse saved time-lapse images                        |
+| `/prusa`    | Upload the latest captured image to Prusa Connect     |
+
+Example:
+
+```text
+http://{CAM_IP}:8080/login
+http://{CAM_IP}:8080/espReset
+http://{CAM_IP}:8080/sdcard
+http://{CAM_IP}:8080/archive
+http://{CAM_IP}:8080/prusa
+```
+
+---
 
 ## Configuration details
 - <a href=include/camera.h>Camera Model</a><br>
