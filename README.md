@@ -9,14 +9,14 @@ The project is designed primarily for **ESP32-CAM boards with an OV2640 camera**
 
 ### ESP32-CAM variants
 
-| Picture                                        | Description              | Notes                      |
-| ---------------------------------------------- | ------------------------ | -------------------------- |
-| <img src="doc/esp32-cam-1.jpg" width="30%">    | AI-Thinker - 'Original'  | 4x Rs                      |
-| <img src="doc/esp32-cam-2.jpg" width="30%">    | AI-Thinker - clone       | 6x Rs                      |
-| <img src="doc/esp32-s3-cam-1.jpg" width="30%"> | ESP32 S3 - ver1          | NeoPixel at IO48           |
-| <img src="doc/esp32-s3-cam-2.jpg" width="30%"> | ESP32 S3 - ver2          | reverse pullup LED at IO01 |
-| <img src="doc/esp32-s3-cam-3.jpg" width="30%"> | ESP32 S3 - ver3          | normal LED at IO03         |
-| <img src="doc/esp32-s3-cam-4.jpg" width="30%"> | ESP32 S3 - Waveshare     | no FlashLED at all         |
+| Picture                                       | Description              | Notes                      |
+| --------------------------------------------- | ------------------------ | -------------------------- |
+| <img src="doc/esp32-cam-1.jpg" width="30%">   | AI-Thinker - 'Original'  | 4x Rs                      |
+| <img src="doc/esp32-cam-2.jpg" width="30%">   | AI-Thinker - clone       | 6x Rs                      |
+| <img src="doc/esp32s3-cam-1.jpg" width="30%"> | ESP32 S3 - ver1          | NeoPixel at IO48           |
+| <img src="doc/esp32s3-cam-2.jpg" width="30%"> | ESP32 S3 - ver2          | reverse pullup LED at IO01 |
+| <img src="doc/esp32s3-cam-3.jpg" width="30%"> | ESP32 S3 - ver3          | normal LED at IO03         |
+| <img src="doc/esp32s3-cam-4.jpg" width="30%"> | ESP32 S3 - Waveshare     | no FlashLED at all         |
 
 ---
 
