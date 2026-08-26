@@ -37,7 +37,7 @@
   #elif defined(CAMERA_MODEL_ESP32S3_CAM_VARIANT_3)
     #undef FLASH_NEOPIXEL
     #undef REVERSE_PULLUP
-    #define FLASH_LED LED_GPIO_NUM
+    #define FLASH_LED 3
 #endif
 #ifdef CAMERA_MODEL_Waveshare_ESP32S3_CAM
   #undef FLASH_NEOPIXEL
