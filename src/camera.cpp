@@ -61,6 +61,8 @@ void initCam( void ) {
 
   config.frame_size = FRAMESIZE_VGA;  // Mozz
 
+  config.jpeg_buffer_size = 0;  // issue espressif#esp32-camera#850
+
   // camera init
   esp_err_t err = esp_camera_init( &config );
   if ( err != ESP_OK ) {
