@@ -24,6 +24,7 @@ extern String cameraNameSuffix;
 extern String photoFrame;
 extern bool timeLapse;
 extern u_int16_t timeLapseInterval;
+extern struct tm photoSnapTime;
 
 extern long timeZone;
 extern byte daySaveTime;
