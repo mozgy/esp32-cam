@@ -38,6 +38,7 @@
     #undef FLASH_NEOPIXEL
     #undef REVERSE_PULLUP
     #define FLASH_LED 3
+  #endif
 #endif
 #ifdef CAMERA_MODEL_Waveshare_ESP32S3_CAM
   #undef FLASH_NEOPIXEL
