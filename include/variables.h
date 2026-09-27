@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 
-#define SW_VERSION "0.35.1"
+#define SW_VERSION "0.36.1"
 
 #define HAVE_CAMERA   // mandatory atm
 #define ESP_CAM_HOSTNAME "mozz-cam"
-#define CAM_SERIAL "2"
+#define CAM_SERIAL "1"
 
 #define FLASH_ENABLED false
 
