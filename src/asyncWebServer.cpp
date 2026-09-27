@@ -162,13 +162,6 @@ void asyncHandlePrusaConnect( AsyncWebServerRequest *request ) {
 }
 #endif
 
-void asyncHandleWebSockets( AsyncWebServerRequest *request ) {
-
-  log_d( " asyncHandleWebSockets " );
-  request->send( 200, "text/plain", "Here Be WebSockets .." );
-
-}
-
 void asyncHandleStream( AsyncWebServerRequest *request ) {
 
   if( !checkWebAuth( request ) ) {
@@ -441,7 +434,6 @@ void initAsyncWebServer( void ) {
   asyncWebServer.on( "/control", HTTP_GET, asyncHandleCommand ); // HTTP_POST
   asyncWebServer.on( "/capture", HTTP_GET, asyncHandleCapture );
   asyncWebServer.on( "/stream", HTTP_GET, asyncHandleStream );
-  asyncWebServer.on( "/ws", HTTP_GET, asyncHandleWebSockets );  // TODO
 
   asyncWebServer.on( "/delete", HTTP_GET, asyncHandleDelete );  // TODO
   asyncWebServer.on( "/archive", HTTP_GET, asyncHandleArchive );
